@@ -1,0 +1,113 @@
+<template>
+  <v-layout row style="padding: 20px">
+      <v-flex xs12 sm4 class="smallspace">
+        <v-card>
+          <v-card-media
+            :src="springImage"
+            height="200px"
+          >
+          </v-card-media>
+          <v-card-title primary-title>
+            <div>
+              <div class="headline">Spring Theme</div>
+              <span class="grey--text">Get leads with this beauty</span>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat @click="$emit('showView', 'EditPage', 'Plane')">Use</v-btn>
+            <v-btn flat to="/plane" color="blue">Preview</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn icon @click.native="show = !show">
+              <v-icon>{{ show ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
+            </v-btn>
+          </v-card-actions>
+          <v-slide-y-transition>
+            <v-card-text v-show="show">
+              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+            </v-card-text>
+          </v-slide-y-transition>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 sm4 class="smallspace">
+        <v-card>
+          <v-card-media
+            :src="beachImage"
+            height="200px"
+          >
+          </v-card-media>
+          <v-card-title primary-title>
+            <div>
+              <div class="headline">Beach Theme</div>
+              <span class="grey--text">Look at that focal point</span>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat @click="$emit('showView', 'EditPage', 'Beach')">Use</v-btn>
+            <v-btn flat color="blue" to="/beach">Preview</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn icon @click.native="show2 = !show2">
+              <v-icon>{{ show2 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
+            </v-btn>
+          </v-card-actions>
+          <v-slide-y-transition>
+            <v-card-text v-show="show2">
+              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+            </v-card-text>
+          </v-slide-y-transition>
+        </v-card>
+      </v-flex>
+    <v-flex xs12 sm4 class="smallspace">
+      <v-card>
+        <v-card-media
+          :src="paraImage"
+          height="200px"
+        >
+        </v-card-media>
+        <v-card-title primary-title>
+          <div>
+            <div class="headline">Para Theme</div>
+            <span class="grey--text">Collect emails from pricks</span>
+          </div>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn flat @click="$emit('showView', 'EditPage', 'Para')">Use</v-btn>
+          <v-btn flat color="blue" to="/paralax">Preview</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn icon @click.native="show3 = !show3">
+            <v-icon>{{ show3 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
+          </v-btn>
+        </v-card-actions>
+        <v-slide-y-transition>
+          <v-card-text v-show="show3">
+            I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+          </v-card-text>
+        </v-slide-y-transition>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</template>
+
+<script>
+  import springImage from "../assets/springtheme4.png"
+  import beachImage from "../assets/beachBackground.png"
+  import paraImage from "../assets/paratheme.png"
+
+
+  export default {
+    data: () => ({
+      show: false,
+      show2: false,
+      show3: false,
+      springImage: springImage,
+      beachImage: beachImage,
+      paraImage: paraImage
+    }),
+  }
+</script>
+
+<style>
+  .smallspace{
+    padding: 10px;
+  }
+</style>
