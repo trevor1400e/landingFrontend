@@ -8,6 +8,7 @@ import Coins from '../components/Coins'
 import EditPage from '../components/EditPage'
 import PageBeach from '../components/PageBeach'
 import PagePara from '../components/PagePara'
+import PageLegal from '../components/legal'
 
 Vue.use(Router)
 
@@ -67,6 +68,11 @@ export default new Router({
       path: '/paralax/:id',
       name: 'PagePara',
       component: PagePara
+    },
+    {
+      path: '/legal',
+      name: 'PageLegal',
+      component: PageLegal
     }
   ]
 })

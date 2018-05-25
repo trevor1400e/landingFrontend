@@ -9,117 +9,134 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1" >
-          <v-form>
+          <v-form v-model="valid">
             <v-text-field
               label="Logo Text"
               v-model="logo"
               @keyup="sendChange('logo', logo)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="Main Headline"
               v-model="title"
               @keyup="sendChange('title', title)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="Main Subheading"
               v-model="description"
               @keyup="sendChange('description', description)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="Button Text"
               v-model="buttontext"
               @keyup="sendChange('buttontext', buttontext)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="Middle Headline"
               v-model="headline"
               @keyup="sendChange('headline', headline)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="Middle Subheading"
               v-model="subheading"
               @keyup="sendChange('subheading', subheading)"
+              :rules="filterRules"
               required
             ></v-text-field>
           </v-form>
-        <v-btn color="primary" @click.native="e1 = 2">Continue</v-btn>
+        <v-btn color="primary" @click.native="e1 = 2" :disabled="!valid">Continue</v-btn>
         <v-btn flat  to="/">Cancel</v-btn>
       </v-stepper-content>
       <v-stepper-content step="2">
-        <v-form>
+        <v-form v-model="valid">
           <v-text-field
             label="Feature One"
             v-model="feature1"
             @keyup="sendChange('feature1', feature1)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Feature One Text"
             v-model="feature1text"
             @keyup="sendChange('feature1text', feature1text)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Feature Two"
             v-model="feature2"
             @keyup="sendChange('feature2', feature2)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Feature Two Text"
             v-model="feature2text"
             @keyup="sendChange('feature2text', feature2text)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Feature Three"
             v-model="feature3"
             @keyup="sendChange('feature3', feature3)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Feature Three Text"
             v-model="feature3text"
             @keyup="sendChange('feature3text', feature3text)"
+            :rules="filterRules"
             required
           ></v-text-field>
         </v-form>
-        <v-btn color="primary" @click.native="e1 = 3">Continue</v-btn>
+        <v-btn color="primary" @click.native="e1 = 3" :disabled="!valid">Continue</v-btn>
         <v-btn flat to="/">Cancel</v-btn>
       </v-stepper-content>
       <v-stepper-content step="3">
-        <v-form>
+        <v-form v-model="valid">
           <v-text-field
             label="Bottom Headline"
             v-model="bottomHeadline"
             @keyup="sendChange('bottomHeadline', bottomHeadline)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Bottom Subdheading"
             v-model="bottomSubheading"
             @keyup="sendChange('bottomSubheading', bottomSubheading)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Bottom Button"
             v-model="bottomButton"
             @keyup="sendChange('bottomButton', bottomButton)"
+            :rules="filterRules"
             required
           ></v-text-field>
           <v-text-field
             label="Page id (/JoeShmoe)"
             v-model="pageid"
+            :rules="pageIdRules"
+            prefix="/"
             required
           ></v-text-field>
           <p class="text-xs-left" v-text="errorText" style="color: red"></p>
         </v-form>
-        <v-btn color="primary" @click.native="hellow">Submit</v-btn>
+        <v-btn color="primary" @click.native="hellow" :disabled="!valid">Submit</v-btn>
         <v-btn flat to="/">Cancel</v-btn>
       </v-stepper-content>
     </v-stepper-items>
@@ -133,6 +150,7 @@
   export default {
     data () {
       return {
+        valid: false,
         e1: 0,
         logo: 'Logo Text',
         title: "Your Main Headline",
@@ -150,7 +168,15 @@
         bottomSubheading: "Kick-start your application today",
         bottomButton: "GET STARTED",
         pageid: 'exampleText',
-        errorText: ''
+        errorText: '',
+        filterRules: [
+          (v) => !!v || 'Text is required',
+          (v) => /^[ A-Za-z0-9_@!:%.#&+(?)=$-]*$/.test(v) || 'Text must contain alpha-numeric only'
+        ],
+        pageIdRules: [
+          (v) => !!v || 'Page id required',
+          (v) => /^[A-Za-z0-9]*$/.test(v) || 'Text must contain alpha-numeric only'
+        ]
       }
     },
     methods:{
