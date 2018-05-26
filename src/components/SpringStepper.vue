@@ -7,51 +7,58 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1" >
-          <v-form>
+          <v-form v-model="valid">
             <v-text-field
               label="Title"
               v-model="title"
               @keyup="sendChange('title', title)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="Description"
               v-model="description"
               @keyup="sendChange('description', description)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="ButtonText"
               v-model="buttontext"
               @keyup="sendChange('buttontext', buttontext)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="PopTitle"
               v-model="poptitle"
               @keyup="sendChange('poptitle', poptitle)"
+              :rules="filterRules"
               required
             ></v-text-field>
             <v-text-field
               label="PopSub"
               v-model="popsub"
               @keyup="sendChange('popsub', popsub)"
+              :rules="filterRules"
               required
             ></v-text-field>
           </v-form>
-        <v-btn color="primary" @click.native="e1 = 2">Continue</v-btn>
+        <v-btn color="primary" @click.native="e1 = 2" :disabled="!valid">Continue</v-btn>
         <v-btn flat  to="/">Cancel</v-btn>
       </v-stepper-content>
       <v-stepper-content step="2">
-        <v-form>
+        <v-form v-model="valid">
           <v-text-field
             label="Page id (/JoeShmoe)"
             v-model="pageid"
+            :rules="pageIdRules"
+            prefix="/"
             required
           ></v-text-field>
           <p class="text-xs-left" v-text="errorText" style="color: red"></p>
         </v-form>
-        <v-btn color="primary" @click.native="hellow">Submit</v-btn>
+        <v-btn color="primary" @click.native="hellow" :disabled="!valid">Submit</v-btn>
         <v-btn flat to="/">Cancel</v-btn>
       </v-stepper-content>
     </v-stepper-items>
@@ -65,6 +72,7 @@
   export default {
     data () {
       return {
+        valid: false,
         e1: 0,
         title: "Spring is Here",
         description: "Receive 10% off your next order",
@@ -72,7 +80,15 @@
         buttontext: "Sign Up",
         poptitle: "Sign Up Now",
         popsub: "Get 10% off your next order!",
-        errorText: ''
+        errorText: '',
+        filterRules: [
+          (v) => !!v || 'Text is required',
+          (v) => /^[ A-Za-z0-9_@!:%.#&+(?)=$-]*$/.test(v) || 'Invalid character'
+        ],
+        pageIdRules: [
+          (v) => !!v || 'Page id required',
+          (v) => /^[A-Za-z0-9]*$/.test(v) || 'Text must contain alpha-numeric only'
+        ]
       }
     },
     methods:{
