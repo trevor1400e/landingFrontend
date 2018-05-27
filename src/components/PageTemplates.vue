@@ -71,7 +71,7 @@
           </div>
         </v-card-title>
         <v-card-actions>
-          <v-btn flat @click="$emit('showView', 'EditPage', 'Para')">Use</v-btn>
+          <v-btn flat @click="$emit('showView', 'EditPage', 'Para')" :disabled="!premium">Use</v-btn>
           <v-btn flat color="blue" to="/paralax">Preview</v-btn>
           <v-spacer></v-spacer>
           <v-btn icon @click.native="show3 = !show3">
@@ -92,7 +92,7 @@
   import springImage from "../assets/springtheme4.png"
   import beachImage from "../assets/beachBackground.png"
   import paraImage from "../assets/paratheme.png"
-
+  import axios from 'axios'
 
   export default {
     data: () => ({
@@ -101,8 +101,29 @@
       show3: false,
       springImage: springImage,
       beachImage: beachImage,
-      paraImage: paraImage
+      paraImage: paraImage,
+      premium: false
     }),
+    created(){
+      this.fetchData()
+    },
+    methods: {
+      fetchData() {
+        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        }).then((resp) => {
+          this.theUser = JSON.parse(JSON.stringify(resp.data))
+
+          if(resp.data.premiumstatus === "active"){
+            this.premium = true
+          }
+
+        })
+          .catch((err) => {
+            console.log(err)
+            this.premium = false
+          })
+      }
+    }
   }
 </script>
 

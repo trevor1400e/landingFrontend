@@ -14,8 +14,7 @@
         <h1>Account Name: {{theUser.username}}</h1>
         <h1>Account Email: {{theUser.email}}</h1>
         <h1>Account Role: {{theUser.roles}} <v-btn color="info" @click="$emit('showView', 'Upgrade')">Upgrade</v-btn></h1>
-        <h1>Premium Exp: {{theUser.premexp}}</h1>
-        <h1>Are you premium: {{premium}}</h1>
+        <h1>Premium Status: {{theUser.premiumstatus}}</h1>
         <br/>
       </v-card>
     </v-flex>
@@ -32,7 +31,7 @@
     data () {
       return {
         theUser: {},
-        premium: false
+        premium: "loading"
       }
     },
     created(){
@@ -44,26 +43,12 @@
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 
-          if(resp.data.premexp != null) {
-            var date1 = new Date(resp.data.premexp);
-
-            var date = new Date();
-
-            //mydate=new Date('2016-09-13');
-
-            if (date < date1) {
-              this.premium = true
-            }
-            else {
-              this.premium = false
-            }
-          }
-
-
+          this.premium = resp.data.premiumstatus
 
         })
           .catch((err) => {
             console.log(err)
+            this.premium = "unpaid"
           })
       }
     }

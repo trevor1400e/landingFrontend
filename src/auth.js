@@ -66,7 +66,7 @@ export default {
     }
   },
   hellobish(header) {
-    axios.get(API_URL+'users/hello', {headers: header}).then(function(response){
+    axios.get(API_URL+'users/me', {headers: header}).then(function(response){
         console.log(response)
     })
   },
