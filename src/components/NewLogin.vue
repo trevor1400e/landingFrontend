@@ -15,40 +15,33 @@
               <!--</v-toolbar>-->
               <v-card-text>
                 <h1 class="fancy">Welcome</h1>
-                <v-form>
-                  <v-text-field v-model="credentials.username" v-on:keyup.enter="submit" prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
-                  <v-text-field v-model="credentials.password" v-on:keyup.enter="submit" prepend-icon="lock" name="password" label="Password" id="password" type="password"></v-text-field>
+                <v-form v-model="valid">
+                  <v-text-field v-model="credentials.username" v-on:keyup.enter="submit" prepend-icon="person" name="login" label="Login" type="text" :rules="userIdRules"></v-text-field>
+                  <v-text-field v-model="credentials.password" v-on:keyup.enter="submit" prepend-icon="lock" name="password" label="Password" id="password" type="password" :rules="required1"></v-text-field>
                 </v-form>
               </v-card-text>
-              <p class="text-xs-left" v-text="errorLogin" style="color: red"></p>
+              <p class="text-xs-left" v-text="errorLogin" style="color: red; padding-left: 10px"></p>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="switchpage('register')">Register</v-btn>
-                <v-btn color="info" @click="submit">Login</v-btn>
+                <v-btn color="info" @click="submit" :disabled="!valid">Login</v-btn>
               </v-card-actions>
             </v-card>
             <v-card class="elevation-12" style="background: rgba(255,255,255,0.6);" v-if="display === 'register'">
-              <!--<v-toolbar dark style="background: rgb(0,100,230);">-->
-              <!--<v-toolbar-title class="text-center">Login form</v-toolbar-title>-->
-              <!--<v-spacer></v-spacer>-->
-              <!--<v-tooltip bottom>-->
-              <!--<span>Source</span>-->
-              <!--</v-tooltip>-->
 
-              <!--</v-toolbar>-->
               <v-card-text>
                 <h1 class="fancy">Register</h1>
-                <v-form>
-                  <v-text-field v-model="credentials.username" prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
-                  <v-text-field v-model="credentials.postEmail" prepend-icon="email" name="email" label="Email" type="text"></v-text-field>
-                  <v-text-field v-model="credentials.password" prepend-icon="lock" name="password" label="Password" id="regpassword" type="password"></v-text-field>
-                  <v-text-field v-model="credentials.passveri" v-on:keyup.enter="register" prepend-icon="lock" name="password" label="Repeat Password" id="regpassword2" type="password"></v-text-field>
+                <v-form v-model="valid">
+                  <v-text-field v-model="credentials.username" prepend-icon="person" name="login" label="Login" type="text" :rules="userIdRules"></v-text-field>
+                  <v-text-field v-model="credentials.postEmail" prepend-icon="email" name="email" label="Email" type="text" :rules="filterRules"></v-text-field>
+                  <v-text-field v-model="credentials.password" prepend-icon="lock" name="password" label="Password" id="regpassword" type="password" :rules="required1"></v-text-field>
+                  <v-text-field v-model="credentials.passveri" prepend-icon="lock" name="password" label="Repeat Password" :rules="required1" id="regpassword2" type="password"></v-text-field>
                 </v-form>
               </v-card-text>
-              <p class="text-xs-left" v-text="errorText" style="color: red"></p>
+              <p class="text-xs-left" v-text="errorText" style="color: red; padding-left: 10px"></p>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="info" @click="register">Register</v-btn>
+                <v-btn color="info" @click="register" :disabled="!valid">Register</v-btn>
                 <v-btn color="primary" @click="switchpage('login')">Login</v-btn>
               </v-card-actions>
             </v-card>
@@ -61,10 +54,12 @@
 
 <script>
   import auth from '../auth'
+  import axios from 'axios'
 
   export default {
     data: () => ({
       drawer: null,
+      valid: false,
       display: 'login',
       errorText: '',
       errorLogin: '',
@@ -73,7 +68,18 @@
         password: '',
         passveri: '',
         postEmail: ''
-      }
+      },
+      filterRules: [
+        (v) => !!v || 'Email is required',
+        (v) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'Invalid email',
+      ],
+      userIdRules: [
+        (v) => !!v || 'Username required',
+        (v) => /^[A-Za-z0-9]*$/.test(v) || 'Text must contain alpha-numeric only'
+      ],
+      required1: [
+        (v) => !!v || 'Password required'
+      ]
     }),
     props: {
       source: String
@@ -115,12 +121,22 @@
       },
       switchpage(page){
         this.display = page
+      },
+      fetchData() {
+        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        }).then((resp) => {
+          this.theUser = JSON.parse(JSON.stringify(resp.data))
+
+          window.location.href = "http://localhost:8080/#/dashboard"
+        })
+          .catch((err) => {
+          })
       }
     },
-    beforeMount(){
+    created(){
       auth.checkAuth()
       if(auth.user.authenticated == true){
-        window.location.href = "http://localhost:8080/#/dashboard"
+        this.fetchData()
       }
     }
   }

@@ -3,7 +3,7 @@
     <h1 class="text-xs-left">Upgrade Page</h1>
     <v-divider></v-divider>
     <br/>
-    <v-flex lg3 offset-lg5 xs4 offset-xs4>
+    <v-flex  xs4 offset-xs4>
       <v-card class="elevation-12" style="border-radius: 15px">
         <v-toolbar dark color="primary">
           <v-flex xs12><v-toolbar-title>1 Month Subscription</v-toolbar-title></v-flex>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="user2.authenticated === true">
+    <div v-if="authenticated === true">
     <v-app id="inspire" v-bind:dark="isdark">
       <v-navigation-drawer
         clipped
@@ -51,7 +51,7 @@
       </v-navigation-drawer>
       <v-toolbar app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>GetLeady</v-toolbar-title>
+        <v-toolbar-title>LeadLucky</v-toolbar-title>
         <v-spacer></v-spacer>
 
         <v-btn @click="logout" round color="blue darken-3" class="white--text" to="/">
@@ -70,12 +70,12 @@
         <PageUpgrade v-if="display === 'Upgrade'"></PageUpgrade>
       </v-content>
       <v-footer app fixed>
-        <span>&copy; 2018</span>
+        <span>LeadLucky &copy; 2018</span>
       </v-footer>
     </v-app>
     </div>
-    <div v-if="user2.authenticated === false">
-      <h1>Please login.</h1>
+    <div v-if="authenticated === false">
+      <h1>Please login, redirecting...</h1>
     </div>
   </div>
 </template>
@@ -91,6 +91,7 @@
   import EditPage from './EditPage'
   import PageAccount from './PageAccount'
   import PageUpgrade from './PageUpgrade'
+  import axios from 'axios'
   import {eventBus} from '../main';
 
   export default {
@@ -103,7 +104,8 @@
       display: 'Dash',
       isdark: false,
       user2: auth.user,
-      themeName: ''
+      themeName: '',
+      authenticated: true
     }),
     methods: {
       showView(viewName, themeName) {
@@ -114,11 +116,28 @@
       },
       logout(){
         auth.logout()
+      },
+      fetchData() {
+        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        }).then((resp) => {
+          this.theUser = JSON.parse(JSON.stringify(resp.data))
+
+          this.authenticated = true
+
+        })
+          .catch((err) => {
+            console.log(err)
+            this.authenticated = false
+            window.location.href = "http://localhost:8080"
+          })
       }
     },
-    beforeMount(){
+    created(){
       auth.checkAuth()
-      if(auth.user.authenticated == false){
+      if(auth.user.authenticated === true){
+        this.fetchData()
+      }else{
+        this.authenticated = false
         window.location.href = "http://localhost:8080"
       }
     }

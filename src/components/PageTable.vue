@@ -19,8 +19,8 @@
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-center">{{ props.item.URL }}</td>
-        <td class="text-xs-center">{{ props.item.conversions }}</td>
-        <td class="text-xs-center">{{ props.item.impressions }}</td>
+        <td v-if="premium === true" class="text-xs-center">{{ props.item.conversions }}</td>
+        <td v-if="premium === true" class="text-xs-center">{{ props.item.impressions }}</td>
         <td class="text-xs-center">{{ props.item.emails }} <a v-if="props.item.emails > 0" @click="getEmails(props.item.name)">Download</a></td>
       </template>
       <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -37,6 +37,7 @@
     data () {
       return {
         search: '',
+        premium: false,
         headers: [
           {
             text: 'Name',
@@ -44,8 +45,6 @@
             value: 'name'
           },
           { text: 'URL', value: 'URL', align: 'center' },
-          { text: 'Conversions', value: 'conversions', align: 'center' },
-          { text: 'Impressions', value: 'impressions', align: 'center' },
           { text: 'Email Count', value: 'emails', align: 'center' }
         ],
         items: [
@@ -62,6 +61,7 @@
     },
     created(){
       this.fetchData()
+      this.fetchPremiumData()
     },
     methods: {
       fetchData() {
@@ -91,6 +91,33 @@
         })
           .catch((err) => {
             console.log(err)
+          })
+      },
+      fetchPremiumData() {
+        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        }).then((resp) => {
+          this.theUser = JSON.parse(JSON.stringify(resp.data))
+
+          if(resp.data.premiumstatus === "active"){
+            this.premium = true
+
+            this.headers = [
+              {
+                text: 'Name',
+                align: 'left',
+                value: 'name'
+              },
+              { text: 'URL', value: 'URL', align: 'center' },
+              { text: 'Conversion Rate', value: 'conversions', align: 'center' },
+              { text: 'Impressions', value: 'impressions', align: 'center' },
+              { text: 'Email Count', value: 'emails', align: 'center' }
+            ]
+          }
+
+        })
+          .catch((err) => {
+            console.log(err)
+            this.premium = false
           })
       }
     }
