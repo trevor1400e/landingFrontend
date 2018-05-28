@@ -4,25 +4,24 @@
       <v-layout>
           <div class="optin">
             <v-flex xs12>
-                <h1 v-show="demoMode === true" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
-                <h2 v-show="demoMode === true" style="font-family: 'Lucida Bright',Georgia,serif; font-size: 2vw; color: #a2b1c4">{{description}}</h2>
+                <h1 v-if="demoMode === true" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
+                <h2 v-if="demoMode === true" style="font-family: 'Lucida Bright',Georgia,serif; font-size: 2vw; color: #a2b1c4">{{description}}</h2>
 
-                <h1 v-show="demoMode === false" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{ pagedata.title }}</h1>
-                <h2 v-show="demoMode === false" style="font-family: 'Lucida Bright',Georgia,serif; font-size: 2vw; color: #a2b1c4">{{ pagedata.description }}</h2>
+                <h1 v-if="demoMode === false" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{ pagedata.title }}</h1>
+                <h2 v-if="demoMode === false" style="font-family: 'Lucida Bright',Georgia,serif; font-size: 2vw; color: #a2b1c4">{{ pagedata.description }}</h2>
                   <!--<p>Name: {{ planedata.name }}</p>-->
 
                 <v-divider class="my-3 white"></v-divider>
 
+              <v-form v-model="valid">
             <v-flex xs12 class="text-xs-right">
-              <v-text-field solo placeholder="example@mysite.com" class="theme--light" v-model="theEmail"></v-text-field>
+              <v-text-field solo placeholder="example@mysite.com" class="theme--light" v-model="theEmail" :rules="filterRules"></v-text-field>
             </v-flex>
-            <br/>
-            <v-btn v-show="demoMode === true" large color="primary" @click.stop="saveEmail(theEmail)" class="mx-0">{{buttontext}}</v-btn>
-            <v-btn v-show="demoMode === false" large color="primary" @click.stop="saveEmail(theEmail)" class="mx-0">{{pagedata.buttontext}}</v-btn>
-
-
-                      <!--<v-btn color="primary" flat @click.stop="saveEmail(theEmail)">Submit</v-btn>-->
-
+                <p class="text-xs-left" v-text="errorText" style="color: red"></p>
+                <br/>
+            <v-btn v-if="demoMode === true" large color="primary" @click.stop="saveEmail(theEmail)" class="mx-0">{{buttontext}}</v-btn>
+            <v-btn v-if="demoMode === false" large color="primary" @click.stop="saveEmail(theEmail)" class="mx-0">{{pagedata.buttontext}}</v-btn>
+              </v-form>
             </v-flex>
               </div>
             </v-layout>
@@ -41,6 +40,7 @@
     components: {App},
     data() {
       return {
+        valid: false,
         pagedata: {},
         dialog2: false,
         demoMode: false,
@@ -48,6 +48,11 @@
         title: "Relax.",
         description: "Receive 10% off your Hotel right now.",
         buttontext: "Save Now",
+        errorText: '',
+        filterRules: [
+        (v) => !!v || 'Email is required',
+        (v) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'Invalid email',
+      ]
       }
     },
 
@@ -74,17 +79,23 @@
       },
       saveEmail(theEmail){
         if(this.$route.params.id != null) {
-          let data = JSON.stringify({
-            uniquename: this.$route.params.id,
-            email: theEmail
-          })
+          if(this.valid){
+            let data = JSON.stringify({
+              uniquename: this.$route.params.id,
+              email: theEmail
+            })
 
-          axios.post('http://localhost:8082/page/email', data, {headers: {"Content-Type": "application/json"}
-          }).then(function(response){
-            console.log(response)
-            window.location.href = "http://localhost:8080/#/"
-            //TODO: set redirect URL as field
-          });
+            axios.post('http://localhost:8082/page/email', data, {headers: {"Content-Type": "application/json"}
+            }).then(function(response){
+              console.log(response)
+              window.location.href = "http://localhost:8080/#/dashboard"
+              //TODO: set redirect URL as field
+            });
+          }else{
+            this.errorText = 'Invalid Email.'
+          }
+        }else{
+          this.errorText = 'You are in preview mode.'
         }
       },
       updateStuff(element, eventName, eventHandler){

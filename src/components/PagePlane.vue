@@ -3,29 +3,31 @@
       <v-container fluid fill-height justify-center>
       <v-layout align-center>
         <v-flex xs6 offset-xs3 class="text-xs-center">
-              <h1 v-show="demoMode === true" class="white--text scalesize">{{title}}</h1>
-              <h2 v-show="demoMode === true" class="black--text" style="font-size: 2vw">{{description}}</h2>
+              <h1 v-if="demoMode === true" class="white--text scalesize">{{title}}</h1>
+              <h2 v-if="demoMode === true" class="black--text" style="font-size: 2vw">{{description}}</h2>
 
-              <h1 v-show="demoMode === false" class="white--text scalesize">{{ planedata.title }}</h1>
-              <h2 v-show="demoMode === false" class="black--text" style="font-size: 2vw">{{ planedata.description }}</h2>
+              <h1 v-if="demoMode === false" class="white--text scalesize">{{ planedata.title }}</h1>
+              <h2 v-if="demoMode === false" class="black--text" style="font-size: 2vw">{{ planedata.description }}</h2>
               <!--<p>Name: {{ planedata.name }}</p>-->
 
               <v-divider class="my-3 white"></v-divider>
-              <v-btn v-show="demoMode === true" large color="primary" @click.stop="dialog2 = true" class="mx-0">{{buttontext}}</v-btn>
-              <v-btn v-show="demoMode === false" large color="primary" @click.stop="dialog2 = true" class="mx-0">{{planedata.buttontext}}</v-btn>
+              <v-btn v-if="demoMode === true" large color="primary" @click.stop="dialog2 = true" class="mx-0">{{buttontext}}</v-btn>
+              <v-btn v-if="demoMode === false" large color="primary" @click.stop="dialog2 = true" class="mx-0">{{planedata.buttontext}}</v-btn>
 
         <v-dialog v-model="dialog2" max-width="500px">
                   <v-card>
                     <v-card-title>
                         <v-flex xs12>
-                          <h3 v-show="demoMode === true" class="display-2">{{poptitle}}</h3>
-                          <h3 v-show="demoMode === false" class="display-2">{{planedata.poptitle}}</h3>
+                          <h3 v-if="demoMode === true" class="display-2">{{poptitle}}</h3>
+                          <h3 v-if="demoMode === false" class="display-2">{{planedata.poptitle}}</h3>
                         </v-flex>
                     </v-card-title>
-                    <h4 v-show="demoMode === true">{{popsub}}</h4>
-                    <h4 v-show="demoMode === false">{{planedata.popsub}}</h4>
+                    <h4 v-if="demoMode === true">{{popsub}}</h4>
+                    <h4 v-if="demoMode === false">{{planedata.popsub}}</h4>
+                    <v-form v-model="valid">
                     <v-flex xs12>
-                    <v-text-field style="padding: 10px" placeholder="example@mysite.com" v-model="theEmail"></v-text-field>
+                    <v-text-field style="padding: 10px" :rules="filterRules" placeholder="example@mysite.com" v-model="theEmail"></v-text-field>
+                      <p class="text-xs-left" v-text="errorText" style="color: red; padding-left: 10px"></p>
                     </v-flex>
 
                     <v-card-actions>
@@ -34,6 +36,7 @@
                       <v-btn color="primary" flat @click.stop="saveEmail(theEmail)">Submit</v-btn>
                       </v-flex>
                     </v-card-actions>
+                    </v-form>
                   </v-card>
                 </v-dialog>
               </v-flex>
@@ -54,6 +57,8 @@
     data() {
       return {
         planedata: {},
+        valid: false,
+        errorText: '',
         dialog2: false,
         demoMode: false,
         theEmail: '',
@@ -62,6 +67,10 @@
         buttontext: "Sign Up",
         poptitle: "Sign Up Now",
         popsub: "Get 10% off your next order!",
+        filterRules: [
+          (v) => !!v || 'Email is required',
+          (v) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'Invalid email',
+        ]
       }
     },
 
@@ -88,17 +97,21 @@
       },
       saveEmail(theEmail){
         if(this.$route.params.id != null) {
-          let data = JSON.stringify({
-            uniquename: this.$route.params.id,
-            email: theEmail
-          })
+          if(this.valid){
+            let data = JSON.stringify({
+              uniquename: this.$route.params.id,
+              email: theEmail
+            })
 
-          axios.post('http://localhost:8082/page/email', data, {headers: {"Content-Type": "application/json"}
-          }).then(function(response){
-            console.log(response)
-            window.location.href = "http://localhost:8080/#/"
-            //TODO: set redirect URL as field
-          });
+            axios.post('http://localhost:8082/page/email', data, {headers: {"Content-Type": "application/json"}
+            }).then(function(response){
+              console.log(response)
+              window.location.href = "http://localhost:8080/#/"
+              //TODO: set redirect URL as field
+            });
+          }
+        }else{
+          this.errorText = 'You are in preview mode.'
         }
       },
       updateStuff(element, eventName, eventHandler){

@@ -18,7 +18,7 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-center">{{ props.item.URL }}</td>
+        <td class="text-xs-center"><a :href="defaultUrl+props.item.URL">{{ props.item.URL }}</a></td>
         <td v-if="premium === true" class="text-xs-center">{{ props.item.conversions }}</td>
         <td v-if="premium === true" class="text-xs-center">{{ props.item.impressions }}</td>
         <td class="text-xs-center">{{ props.item.emails }} <a v-if="props.item.emails > 0" @click="getEmails(props.item.name)">Download</a></td>
@@ -37,6 +37,7 @@
     data () {
       return {
         search: '',
+        defaultUrl: 'http://localhost:8080/#',
         premium: false,
         headers: [
           {

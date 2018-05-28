@@ -8,6 +8,7 @@ import Coins from '../components/Coins'
 import EditPage from '../components/EditPage'
 import PageBeach from '../components/PageBeach'
 import PagePara from '../components/PagePara'
+import PageDrawing from '../components/PageDrawing'
 import PageLegal from '../components/legal'
 
 Vue.use(Router)
@@ -73,6 +74,16 @@ export default new Router({
       path: '/legal',
       name: 'PageLegal',
       component: PageLegal
+    },
+    {
+      path: '/drawing',
+      name: 'PageDrawingOG',
+      component: PageDrawing
+    },
+    {
+      path: '/drawing/:id',
+      name: 'PageDrawing',
+      component: PageDrawing
     }
   ]
 })

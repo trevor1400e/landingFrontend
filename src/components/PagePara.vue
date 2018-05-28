@@ -1,8 +1,8 @@
 <template>
     <v-app light id="app" class="theme--light">
       <v-toolbar class="white">
-        <v-toolbar-title v-show="demoMode === true">{{logo}}</v-toolbar-title>
-        <v-toolbar-title v-show="demoMode === false">{{pagedata.logo}}</v-toolbar-title>
+        <v-toolbar-title v-if="demoMode === true">{{logo}}</v-toolbar-title>
+        <v-toolbar-title v-if="demoMode === false">{{pagedata.logo}}</v-toolbar-title>
       </v-toolbar>
       <v-content>
         <section>
@@ -13,14 +13,15 @@
               justify-center
               class="white--text"
             >
-              <h1 v-show="demoMode === true" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
-              <h1 v-show="demoMode === false" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{pagedata.title}}</h1>
+              <h1 v-if="demoMode === true" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
+              <h1 v-if="demoMode === false" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{pagedata.title}}</h1>
               <!--<h1 class="white&#45;&#45;text mb-2 display-1 text-xs-center">Parallax Template</h1>-->
               <div class="mb-2 text-xs-center" style="font-size: 2vw">{{description}}
-                <v-text-field v-show="demoMode === true" solo placeholder="example@mysite.com" class="theme--light" v-model="theEmail"></v-text-field>
-                <v-text-field v-show="demoMode === false" solo placeholder="example@mysite.com" class="theme--light" v-model="theEmail"></v-text-field>
-                <v-btn
-                  v-show="demoMode === true"
+                <v-form v-model="valid">
+                <v-text-field solo placeholder="example@mysite.com" class="theme--light" v-model="theEmail" :rules="filterRules"></v-text-field>
+                  <p class="text-xs-left" v-text="errorText" style="color: red"></p>
+                  <v-btn
+                  v-if="demoMode === true"
                   class="blue lighten-2 mt-5"
                   dark
                   large
@@ -28,13 +29,14 @@
                   {{buttontext}}
                 </v-btn>
                 <v-btn
-                  v-show="demoMode === false"
+                  v-if="demoMode === false"
                   class="blue lighten-2 mt-5"
                   dark
                   large
                   @click.stop="saveEmail(theEmail)">
                   {{pagedata.buttontext}}
                 </v-btn>
+                </v-form>
               </div>
 
             </v-layout>
@@ -50,12 +52,12 @@
           >
             <v-flex xs12 sm4 class="my-3">
               <div class="text-xs-center">
-                <h2 v-show="demoMode === true" class="headline">{{headline}}</h2>
-                <h2 v-show="demoMode === false" class="headline">{{pagedata.headline}}</h2>
-                <span v-show="demoMode === true" class="subheading">
+                <h2 v-if="demoMode === true" class="headline">{{headline}}</h2>
+                <h2 v-if="demoMode === false" class="headline">{{pagedata.headline}}</h2>
+                <span v-if="demoMode === true" class="subheading">
                 {{subheading}}
               </span>
-                <span v-show="demoMode === false" class="subheading">
+                <span v-if="demoMode === false" class="subheading">
                 {{pagedata.subheading}}
               </span>
               </div>
@@ -69,13 +71,13 @@
                         <v-icon x-large class="blue--text text--lighten-2">color_lens</v-icon>
                       </v-card-text>
                       <v-card-title primary-title class="layout justify-center">
-                        <div v-show="demoMode === true" class="headline text-xs-center">{{feature1}}</div>
-                        <div v-show="demoMode === false" class="headline text-xs-center">{{pagedata.feature1}}</div>
+                        <div v-if="demoMode === true" class="headline text-xs-center">{{feature1}}</div>
+                        <div v-if="demoMode === false" class="headline text-xs-center">{{pagedata.feature1}}</div>
                       </v-card-title>
-                      <v-card-text v-show="demoMode === true">
+                      <v-card-text v-if="demoMode === true">
                         {{feature1text}}
                       </v-card-text>
-                      <v-card-text v-show="demoMode === false">
+                      <v-card-text v-if="demoMode === false">
                         {{pagedata.feature1text}}
                       </v-card-text>
                     </v-card>
@@ -86,13 +88,13 @@
                         <v-icon x-large class="blue--text text--lighten-2">flash_on</v-icon>
                       </v-card-text>
                       <v-card-title primary-title class="layout justify-center">
-                        <div v-show="demoMode === true" class="headline">{{feature2}}</div>
-                        <div v-show="demoMode === false" class="headline">{{pagedata.feature2}}</div>
+                        <div v-if="demoMode === true" class="headline">{{feature2}}</div>
+                        <div v-if="demoMode === false" class="headline">{{pagedata.feature2}}</div>
                       </v-card-title>
-                      <v-card-text v-show="demoMode === true">
+                      <v-card-text v-if="demoMode === true">
                         {{feature2text}}
                       </v-card-text>
-                      <v-card-text v-show="demoMode === false">
+                      <v-card-text v-if="demoMode === false">
                         {{pagedata.feature2text}}
                       </v-card-text>
                     </v-card>
@@ -103,13 +105,13 @@
                         <v-icon x-large class="blue--text text--lighten-2">build</v-icon>
                       </v-card-text>
                       <v-card-title primary-title class="layout justify-center">
-                        <div v-show="demoMode === true" class="headline text-xs-center">{{feature3}}</div>
-                        <div v-show="demoMode === false" class="headline text-xs-center">{{pagedata.feature3}}</div>
+                        <div v-if="demoMode === true" class="headline text-xs-center">{{feature3}}</div>
+                        <div v-if="demoMode === false" class="headline text-xs-center">{{pagedata.feature3}}</div>
                       </v-card-title>
-                      <v-card-text v-show="demoMode === true">
+                      <v-card-text v-if="demoMode === true">
                         {{feature3text}}
                       </v-card-text>
-                      <v-card-text v-show="demoMode === false">
+                      <v-card-text v-if="demoMode === false">
                         {{pagedata.feature3text}}
                       </v-card-text>
                     </v-card>
@@ -123,12 +125,12 @@
         <section>
           <v-parallax :src="sectionImage" height="380">
             <v-layout column align-center justify-center>
-              <div v-show="demoMode === true" class="headline white--text mb-3 text-xs-center">{{bottomHeadline}}</div>
-              <div v-show="demoMode === false" class="headline white--text mb-3 text-xs-center">{{pagedata.bottomHeadline}}</div>
-              <em v-show="demoMode === true">{{bottomSubheading}}</em>
-              <em v-show="demoMode === false">{{pagedata.bottomSubheading}}</em>
+              <div v-if="demoMode === true" class="headline white--text mb-3 text-xs-center">{{bottomHeadline}}</div>
+              <div v-if="demoMode === false" class="headline white--text mb-3 text-xs-center">{{pagedata.bottomHeadline}}</div>
+              <em v-if="demoMode === true">{{bottomSubheading}}</em>
+              <em v-if="demoMode === false">{{pagedata.bottomSubheading}}</em>
               <v-btn
-                v-show="demoMode === true"
+                v-if="demoMode === true"
                 class="blue lighten-2 mt-5"
                 dark
                 large
@@ -137,7 +139,7 @@
                 {{bottomButton}}
               </v-btn>
               <v-btn
-                v-show="demoMode === false"
+                v-if="demoMode === false"
                 class="blue lighten-2 mt-5"
                 dark
                 large
@@ -177,6 +179,8 @@
     data() {
       return {
         pagedata: {},
+        valid: false,
+        errorText: '',
         eventdata: {},
         dialog2: false,
         demoMode: false,
@@ -198,7 +202,11 @@
         bottomButton: "GET STARTED",
         heroImage: heroImage,
         sectionImage: sectionImage,
-        vuetifyImage: vuetifyImage
+        vuetifyImage: vuetifyImage,
+        filterRules: [
+          (v) => !!v || 'Email is required',
+          (v) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'Invalid email',
+        ]
       }
     },
 
@@ -224,18 +232,24 @@
       },
       saveEmail(theEmail) {
         if (this.$route.params.id != null) {
-          let data = JSON.stringify({
-            uniquename: this.$route.params.id,
-            email: theEmail
-          })
+          if(this.valid){
+            let data = JSON.stringify({
+              uniquename: this.$route.params.id,
+              email: theEmail
+            })
 
-          axios.post('http://localhost:8082/page/email', data, {
-            headers: {"Content-Type": "application/json"}
-          }).then(function (response) {
-            console.log(response)
-            window.location.href = "http://localhost:8080/#/"
-            //TODO: set redirect URL as field
-          });
+            axios.post('http://localhost:8082/page/email', data, {
+              headers: {"Content-Type": "application/json"}
+            }).then(function (response) {
+              console.log(response)
+              window.location.href = "http://localhost:8080/#/"
+              //TODO: set redirect URL as field
+            });
+          }else{
+            this.errorText = 'Invalid Email.'
+          }
+        }else{
+          this.errorText = 'You are in preview mode.'
         }
       },
       updateStuff(element, eventName, eventHandler){
