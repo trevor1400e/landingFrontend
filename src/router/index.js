@@ -9,7 +9,9 @@ import EditPage from '../components/EditPage'
 import PageBeach from '../components/PageBeach'
 import PagePara from '../components/PagePara'
 import PageDrawing from '../components/PageDrawing'
+import PageForest from '../components/PageForest'
 import PageLegal from '../components/legal'
+import PagePrivacy from '../components/privacy'
 
 Vue.use(Router)
 
@@ -84,6 +86,21 @@ export default new Router({
       path: '/drawing/:id',
       name: 'PageDrawing',
       component: PageDrawing
+    },
+    {
+      path: '/privacy',
+      name: 'privacyOG',
+      component: PagePrivacy
+    },
+    {
+      path: '/forest',
+      name: 'forestOG',
+      component: PageForest
+    },
+    {
+      path: '/forest/:id',
+      name: 'forest',
+      component: PageForest
     }
   ]
 })

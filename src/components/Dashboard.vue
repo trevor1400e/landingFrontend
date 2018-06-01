@@ -69,8 +69,10 @@
         <PageAccount @showView="showView" v-if="display === 'Acct'"></PageAccount>
         <PageUpgrade v-if="display === 'Upgrade'"></PageUpgrade>
       </v-content>
-      <v-footer app fixed>
+      <v-footer app fixed style="color: #7c7c7c">
         <span>LeadLucky &copy; 2018</span>
+        <v-spacer></v-spacer>
+        <span>Support@LeadLucky.com</span>
       </v-footer>
     </v-app>
     </div>

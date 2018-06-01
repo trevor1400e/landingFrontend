@@ -36,6 +36,14 @@
                   <v-text-field v-model="credentials.postEmail" prepend-icon="email" name="email" label="Email" type="text" :rules="filterRules"></v-text-field>
                   <v-text-field v-model="credentials.password" prepend-icon="lock" name="password" label="Password" id="regpassword" type="password" :rules="required1"></v-text-field>
                   <v-text-field v-model="credentials.passveri" prepend-icon="lock" name="password" label="Repeat Password" :rules="required1" id="regpassword2" type="password"></v-text-field>
+                  <v-checkbox
+                    v-model="checkbox"
+                    :rules="[v => !!v || 'You must agree to continue.']"
+                    required
+                    color="primary"
+                  >
+                    <span slot="label" style="font-size: 0.75vw">Do you agree to the <a href="/#/legal" target="_blank">Terms & Conditions</a>and<a href="/#/privacy" target="_blank"> Privacy Policy</a>?</span>
+                  </v-checkbox>
                 </v-form>
               </v-card-text>
               <p class="text-xs-left" v-text="errorText" style="color: red; padding-left: 10px"></p>
@@ -62,6 +70,7 @@
       valid: false,
       display: 'login',
       errorText: '',
+      checkbox: false,
       errorLogin: '',
       credentials: {
         username: '',
@@ -152,4 +161,5 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 40px;
   }
+
 </style>

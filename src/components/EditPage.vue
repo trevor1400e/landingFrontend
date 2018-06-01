@@ -6,6 +6,7 @@
         <iframe v-if="display === 'Beach'" id="beachframe" src="/#/beach" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
         <iframe v-if="display === 'Para'" id="paraframe" src="/#/paralax" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
         <iframe v-if="display === 'Drawing'" id="drawingframe" src="/#/drawing" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
+        <iframe v-if="display === 'Forest'" id="forestframe" src="/#/forest" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
         <!--<PagePara v-if="display === 'Para'" class="application&#45;&#45;wrap" style="height: 500px; width: 90%; min-height: 0vh"></PagePara>-->
     </v-flex>
       <v-spacer></v-spacer>
@@ -16,6 +17,7 @@
       <beachStepper v-if="display === 'Beach'"></beachStepper>
       <paraStepper v-if="display === 'Para'"></paraStepper>
       <drawingStepper v-if="display === 'Drawing'"></drawingStepper>
+      <forestStepper v-if="display === 'Forest'"></forestStepper>
     </v-flex>
     </v-layout>
   </v-container>
@@ -29,6 +31,7 @@
   import beachStepper from './BeachStepper'
   import paraStepper from './ParaStepper'
   import drawingStepper from './DrawingStepper'
+  import forestStepper from './ForestStepper'
   import PagePlane from './PagePlane';
   import PageBeach from './PageBeach';
   import PagePara from './PagePara';
@@ -46,7 +49,7 @@
     },
     components: {
       PagePlane, PageBeach, PagePara, PageDrawing,
-      vuetify, springStepper, beachStepper, paraStepper, drawingStepper
+      vuetify, springStepper, beachStepper, paraStepper, drawingStepper, forestStepper
     },
     props: {
       parentData: {
