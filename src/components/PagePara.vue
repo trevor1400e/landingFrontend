@@ -134,7 +134,7 @@
                 class="blue lighten-2 mt-5"
                 dark
                 large
-                href="/pre-made-themes"
+                @click="scrollup"
               >
                 {{bottomButton}}
               </v-btn>
@@ -143,7 +143,7 @@
                 class="blue lighten-2 mt-5"
                 dark
                 large
-                href="/pre-made-themes"
+                @click="scrollup"
               >
                 {{pagedata.bottomButton}}
               </v-btn>
@@ -156,7 +156,7 @@
             <v-flex xs12>
               <div class="white--text ml-3">
                 Powered
-                by <a class="white--text" href="https://github.com/vwxyzjn">LeadPages</a>
+                by <a class="white--text" href="#">LeadLucky</a>
               </div>
             </v-flex>
           </v-layout>
@@ -167,6 +167,7 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
   import App from "../App";
   import {eventBus} from '../main';
   import heroImage from '../assets/hero.jpeg'
@@ -216,9 +217,8 @@
     methods: {
       fetchData() {
         if (this.$route.params.id != null) {
-          axios.get('http://localhost:8082/page/' + this.$route.params.id + '/')
+          axios.get(auth.API.URL+'page/' + this.$route.params.id + '/')
             .then((resp) => {
-              console.log(resp)
               const myObjStr = JSON.stringify(resp.data);
               this.pagedata = JSON.parse(myObjStr)
             })
@@ -227,10 +227,12 @@
             })
         } else {
           this.demoMode = true
-          console.log('demoMode == true')
         }
       },
       saveEmail(theEmail) {
+
+        var self = this;
+
         if (this.$route.params.id != null) {
           if(this.valid){
             let data = JSON.stringify({
@@ -238,12 +240,13 @@
               email: theEmail
             })
 
-            axios.post('http://localhost:8082/page/email', data, {
+            axios.post(auth.API.URL+'page/email', data, {
               headers: {"Content-Type": "application/json"}
             }).then(function (response) {
               console.log(response)
-              window.location.href = "http://localhost:8080/#/"
-              //TODO: set redirect URL as field
+              window.location.href = self.pagedata.redirectUrl
+            }).catch((err) => {
+              console.log('Loading page data failed or invalid redirect.')
             });
           }else{
             this.errorText = 'Invalid Email.'
@@ -258,6 +261,9 @@
         } else if (element.attachEvent) {
           element.attachEvent('on' + eventName, eventHandler);
         }
+      },
+      scrollup(){
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
       }
     },
       mounted(){
@@ -300,7 +306,6 @@
                 } else if (this.eventdata.whatsChanging == 'bottomButton') {
                   this.bottomButton = this.eventdata.changeTo
                 } else {
-                  console.log('NoThInG ChAnGeD')
                 }
               }
             }catch(err){

@@ -26,6 +26,7 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
 
   export default {
     data () {
@@ -39,7 +40,7 @@
     },
     methods: {
       fetchData() {
-        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 

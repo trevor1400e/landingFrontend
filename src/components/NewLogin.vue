@@ -109,7 +109,7 @@
         })
       },
       register() {
-        if(this.credentials.password == this.credentials.passveri) {
+        if(this.credentials.password === this.credentials.passveri) {
           let data = JSON.stringify({
             username: this.credentials.username,
             password: this.credentials.password,
@@ -132,11 +132,12 @@
         this.display = page
       },
       fetchData() {
-        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 
-          window.location.href = "http://localhost:8080/#/dashboard"
+          console.log(auth.API.REDIRECT_URL+"dashboard")
+          window.location.href = auth.API.REDIRECT_URL+"dashboard"
         })
           .catch((err) => {
           })

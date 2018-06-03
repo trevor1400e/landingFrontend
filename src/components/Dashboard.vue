@@ -88,13 +88,14 @@
   import alertmessage from './alertmessage'
   import PageTable from './PageTable'
   import PageTemplates from './PageTemplates'
-  import PagePlane from './PagePlane'
+  import PagePlane from './PageSpring'
   import auth from '../auth'
   import EditPage from './EditPage'
   import PageAccount from './PageAccount'
   import PageUpgrade from './PageUpgrade'
   import axios from 'axios'
   import {eventBus} from '../main';
+
 
   export default {
     name: 'Dashboard',
@@ -120,7 +121,7 @@
         auth.logout()
       },
       fetchData() {
-        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 
@@ -130,7 +131,7 @@
           .catch((err) => {
             console.log(err)
             this.authenticated = false
-            window.location.href = "http://localhost:8080"
+            window.location.href = auth.API.REDIRECT_URL
           })
       }
     },
@@ -140,7 +141,7 @@
         this.fetchData()
       }else{
         this.authenticated = false
-        window.location.href = "http://localhost:8080"
+        window.location.href = auth.API.REDIRECT_URL
       }
     }
   }

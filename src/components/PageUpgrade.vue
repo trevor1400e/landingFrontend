@@ -32,6 +32,7 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
   import Vue from 'vue';
   import VueStripeCheckout from 'vue-stripe-checkout';
 
@@ -57,7 +58,7 @@
     },
     methods: {
       fetchData() {
-        axios.get('http://localhost:8082/users/me', {
+        axios.get(auth.API.URL+'users/me', {
           headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
@@ -80,17 +81,14 @@
             // for payment or subscription handling,
             // or do whatever you want with it
             // I don't really care.
-            console.log(token)
-            console.log(token.id)
             var usertoken = token.id
             let data = JSON.stringify({
               chargetoken: usertoken,
               email: "test@gmail.com"
             })
 
-            axios.post('http://localhost:8082/users/upgrade', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+            axios.post(auth.API.URL+'users/upgrade', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
             }).then(function(response){
-              console.log(response)
             });
           }
         });
@@ -99,7 +97,6 @@
         'stripe-checkout': VueStripeCheckout
       }
     }
-    //TODO: make role check, if !null check exp date, else return false.
 
 </script>
 

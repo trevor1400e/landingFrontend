@@ -128,6 +128,12 @@
             required
           ></v-text-field>
           <v-text-field
+            label="Email Submit Redirect Url"
+            v-model="redirectUrl"
+            :rules="filterRules"
+            required
+          ></v-text-field>
+          <v-text-field
             label="Page id (/JoeShmoe)"
             v-model="pageid"
             :rules="pageIdRules"
@@ -145,6 +151,7 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
   import {eventBus} from '../main';
 
   export default {
@@ -168,10 +175,11 @@
         bottomSubheading: "Kick-start your application today",
         bottomButton: "GET STARTED",
         pageid: 'exampleText',
+        redirectUrl: "http://www.google.com",
         errorText: '',
         filterRules: [
           (v) => !!v || 'Text is required',
-          (v) => /^[ A-Za-z0-9_@!:%.#&+(?)=$-]*$/.test(v) || 'Text must contain alpha-numeric only'
+          (v) => /^[ A-Za-z0-9_@!:%.,/#&+(?)=$-]*$/.test(v) || 'Text must contain alpha-numeric only'
         ],
         pageIdRules: [
           (v) => !!v || 'Page id required',
@@ -198,6 +206,7 @@
           bottomHeadline: this.bottomHeadline,
           bottomSubheading: this.bottomSubheading,
           bottomButton: this.bottomButton,
+          redirectUrl: this.redirectUrl
         })
 
         let data = JSON.stringify({
@@ -208,11 +217,10 @@
 
         var self = this
 
-        axios.post('http://localhost:8082/users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then(function(response){
-          console.log(response)
           if(response.data){
-            window.location.href = "http://localhost:8080/#/"
+            window.location.href = auth.API.REDIRECT_URL
           }else{
             self.errorText = 'Page name already taken.'
           }

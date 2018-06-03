@@ -50,6 +50,12 @@
       <v-stepper-content step="2">
         <v-form v-model="valid">
           <v-text-field
+            label="Email Submit Redirect Url"
+            v-model="redirectUrl"
+            :rules="filterRules"
+            required
+          ></v-text-field>
+          <v-text-field
             label="Page id (/JoeShmoe)"
             v-model="pageid"
             :rules="pageIdRules"
@@ -67,6 +73,7 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
   import {eventBus} from '../main';
 
   export default {
@@ -80,10 +87,11 @@
         buttontext: "Sign Up",
         poptitle: "Sign Up Now",
         popsub: "Get 10% off your next order!",
+        redirectUrl: "http://www.google.com",
         errorText: '',
         filterRules: [
           (v) => !!v || 'Text is required',
-          (v) => /^[ A-Za-z0-9_@!:%.#&+(?)=$-]*$/.test(v) || 'Invalid character'
+          (v) => /^[ A-Za-z0-9_@!:%.,/#&+(?)=$-]*$/.test(v) || 'Invalid character'
         ],
         pageIdRules: [
           (v) => !!v || 'Page id required',
@@ -93,28 +101,28 @@
     },
     methods:{
       hellow: function(){
-        console.log(this.title+this.description+this.pageid)
         let theData = JSON.stringify({
           title: this.title,
           description: this.description,
           buttontext: this.buttontext,
           poptitle: this.poptitle,
-          popsub: this.popsub
+          popsub: this.popsub,
+          redirectUrl: this.redirectUrl
         })
 
         let data = JSON.stringify({
           uniquename: this.pageid,
-          themename: 'plane',
+          themename: 'spring',
           data: theData
         })
 
         var self = this
 
-        axios.post('http://localhost:8082/users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then(function(response){
           console.log(response)
           if(response.data){
-            window.location.href = "http://localhost:8080/#/"
+            window.location.href = auth.API.REDIRECT_URL
           }else{
             self.errorText = 'Page name already taken.'
           }

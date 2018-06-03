@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import PagePlane from '../components/PagePlane'
+import PageSpring from '../components/PageSpring'
 import Dashboard from '../components/Dashboard'
 import Login from '../components/Login'
 import NewLogin from '../components/NewLogin'
@@ -28,14 +28,14 @@ export default new Router({
       component: Dashboard
     },
     {
-      path: '/plane/:id',
-      name:'PagePlane',
-      component: PagePlane
+      path: '/spring/:id',
+      name:'PageSpring',
+      component: PageSpring
     },
     {
-      path: '/plane',
-      name:'PagePlaneOG',
-      component: PagePlane
+      path: '/spring',
+      name:'PageSpringOG',
+      component: PageSpring
     },
     {
       path: '/',

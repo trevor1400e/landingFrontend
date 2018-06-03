@@ -5,15 +5,31 @@ import axios from 'axios'
 import Vue from 'vue'
 
 // URL and endpoint constants
-const API_URL = 'http://localhost:8082/'
+
+var demomode = false
+var API_URL;
+var REDIRECT_URL;
+
+if(demomode === false){
+  API_URL = 'http://65.151.191.49:8082/'
+  REDIRECT_URL = 'http://leadlucky.com/#/'
+}else{
+  API_URL = 'http://localhost:8082/'
+  REDIRECT_URL = 'http://localhost:8080/#/'
+}
 const LOGIN_URL = API_URL + 'users/signin'
 const SIGNUP_URL = API_URL + 'users/signup'
+
 
 export default {
 
   // User object will let us check authentication status
   user: {
     authenticated: false
+  },
+  API:{
+    URL: API_URL,
+    REDIRECT_URL: REDIRECT_URL
   },
 
 
@@ -26,7 +42,7 @@ export default {
       localStorage.setItem('id_token', response.data)
       localStorage.setItem('access_token', response.data)
 
-      window.location.href = "http://localhost:8080/#/dashboard"
+      window.location.href = window.location.href+"dashboard"
 
       callback(true)
     }).catch(error => {
@@ -40,7 +56,7 @@ export default {
       localStorage.setItem('id_token', response.data)
       localStorage.setItem('access_token', response.data)
 
-      window.location.href = "http://localhost:8080/#/dashboard"
+      window.location.href = window.location.href+"dashboard"
       callback2(true)
     }).catch(error => {
       callback2(false)
@@ -58,11 +74,9 @@ export default {
     var jwt = localStorage.getItem('id_token')
     if(jwt) {
       this.user.authenticated = true
-      console.log("authenticated is true")
     }
     else {
       this.user.authenticated = false
-      console.log("authenticated is false")
     }
   },
   hellobish(header) {

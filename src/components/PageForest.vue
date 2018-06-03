@@ -115,6 +115,7 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
   import App from "../App";
   import {eventBus} from '../main';
 
@@ -158,7 +159,7 @@
     methods: {
       fetchData() {
         if(this.$route.params.id != null) {
-          axios.get('http://localhost:8082/page/' + this.$route.params.id + '/')
+          axios.get(auth.API.URL+'page/' + this.$route.params.id + '/')
             .then((resp) => {
               console.log(resp)
               const myObjStr = JSON.stringify(resp.data);
@@ -169,10 +170,12 @@
             })
         }else{
           this.demoMode = true
-          console.log('demoMode == true')
         }
       },
       saveEmail(theEmail){
+
+      var self = this;
+
         if(this.$route.params.id != null) {
           if(this.valid){
             let data = JSON.stringify({
@@ -180,11 +183,12 @@
               email: theEmail
             })
 
-            axios.post('http://localhost:8082/page/email', data, {headers: {"Content-Type": "application/json"}
+            axios.post(auth.API.URL+'page/email', data, {headers: {"Content-Type": "application/json"}
             }).then(function(response){
               console.log(response)
-              window.location.href = "http://localhost:8080/#/dashboard"
-              //TODO: set redirect URL as field
+              window.location.href = self.pagedata.redirectUrl
+            }).catch((err) => {
+              console.log('Loading page data failed or invalid redirect.')
             });
           }else{
             this.errorText = 'Invalid Email.'
@@ -239,7 +243,6 @@
               } else if (this.eventdata.whatsChanging === 'photo3text') {
                 this.photo3text = this.eventdata.changeTo
               } else {
-                console.log('NoThInG ChAnGeD')
               }
             }
           }catch(err){

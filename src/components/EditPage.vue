@@ -2,7 +2,7 @@
   <v-container grid-list fill-height>
     <v-layout row>
     <v-flex sm8>
-        <iframe v-if="display === 'Plane'" id="springframe" src="/#/plane" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
+        <iframe v-if="display === 'Spring'" id="springframe" src="/#/spring" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
         <iframe v-if="display === 'Beach'" id="beachframe" src="/#/beach" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
         <iframe v-if="display === 'Para'" id="paraframe" src="/#/paralax" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
         <iframe v-if="display === 'Drawing'" id="drawingframe" src="/#/drawing" style="height: 500px; width: 90%; min-height: 0vh"></iframe>
@@ -13,7 +13,7 @@
     <v-flex sm4>
       <!-- - add validation to text fields-->
       <!-- - fill out dashboard fields from Theme table lookup-->
-      <springStepper v-if="display === 'Plane'"></springStepper>
+      <springStepper v-if="display === 'Spring'"></springStepper>
       <beachStepper v-if="display === 'Beach'"></beachStepper>
       <paraStepper v-if="display === 'Para'"></paraStepper>
       <drawingStepper v-if="display === 'Drawing'"></drawingStepper>
@@ -32,7 +32,7 @@
   import paraStepper from './ParaStepper'
   import drawingStepper from './DrawingStepper'
   import forestStepper from './ForestStepper'
-  import PagePlane from './PagePlane';
+  import PageSpring from './PageSpring';
   import PageBeach from './PageBeach';
   import PagePara from './PagePara';
   import PageDrawing from './PageDrawing';
@@ -48,7 +48,7 @@
       }
     },
     components: {
-      PagePlane, PageBeach, PagePara, PageDrawing,
+      PageSpring, PageBeach, PagePara, PageDrawing,
       vuetify, springStepper, beachStepper, paraStepper, drawingStepper, forestStepper
     },
     props: {

@@ -15,8 +15,8 @@
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat @click="$emit('showView', 'EditPage', 'Plane')">Use</v-btn>
-            <v-btn flat to="/plane" color="blue">Preview</v-btn>
+            <v-btn flat @click="$emit('showView', 'EditPage', 'Spring')">Use</v-btn>
+            <v-btn flat to="/spring" color="blue">Preview</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click.native="show = !show">
               <v-icon>{{ show ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
@@ -24,7 +24,7 @@
           </v-card-actions>
           <v-slide-y-transition>
             <v-card-text v-show="show">
-              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+              Free Theme.
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -53,7 +53,7 @@
           </v-card-actions>
           <v-slide-y-transition>
             <v-card-text v-show="show2">
-              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+              Free Theme.
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -61,18 +61,26 @@
     <v-flex xs12 sm4 class="smallspace">
       <v-card>
         <v-card-media
-          :src="paraImage"
+          v-if="!premium"
+          :src="paraLockedImage"
           height="200px"
         >
+        </v-card-media>
+          <v-card-media
+            v-if="premium"
+            :src="paraImage"
+            height="200px"
+          >
         </v-card-media>
         <v-card-title primary-title>
           <div>
             <div class="headline text-xs-left">Paralax Theme</div>
-            <span class="grey--text">Paralax beautiful premium theme.</span>
+            <span class="grey--text">Paralax+Mobile optimized theme.</span>
           </div>
         </v-card-title>
         <v-card-actions>
-          <v-btn flat @click="$emit('showView', 'EditPage', 'Para')" :disabled="!premium">Use</v-btn>
+          <v-btn flat @click="$emit('showView', 'EditPage', 'Para')" v-if="premium">Use</v-btn>
+          <v-btn flat @click="$emit('showView', 'Upgrade')" v-if="!premium">Upgrade</v-btn>
           <v-btn flat color="blue" to="/paralax">Preview</v-btn>
           <v-spacer></v-spacer>
           <v-btn icon @click.native="show3 = !show3">
@@ -81,7 +89,7 @@
         </v-card-actions>
         <v-slide-y-transition>
           <v-card-text v-show="show3">
-            I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+            Premium Theme.
           </v-card-text>
         </v-slide-y-transition>
       </v-card>
@@ -91,18 +99,26 @@
       <v-flex xs12 sm4 class="smallspace">
         <v-card>
           <v-card-media
+            v-if="premium"
             :src="drawingImage"
+            height="200px"
+          >
+          </v-card-media>
+          <v-card-media
+            v-if="!premium"
+            :src="drawingLockedImage"
             height="200px"
           >
           </v-card-media>
           <v-card-title primary-title>
             <div>
               <div class="headline text-xs-left">Drawing Theme</div>
-              <span class="grey--text">Paralax beautiful premium theme.</span>
+              <span class="grey--text">Video animation background.</span>
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat @click="$emit('showView', 'EditPage', 'Drawing')" :disabled="!premium">Use</v-btn>
+            <v-btn flat @click="$emit('showView', 'EditPage', 'Drawing')" v-if="premium">Use</v-btn>
+            <v-btn flat @click="$emit('showView', 'Upgrade')" v-if="!premium">Upgrade</v-btn>
             <v-btn flat color="blue" to="/drawing">Preview</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click.native="show4 = !show4">
@@ -111,7 +127,7 @@
           </v-card-actions>
           <v-slide-y-transition>
             <v-card-text v-show="show4">
-              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+              Premium Theme.
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -119,27 +135,35 @@
       <v-flex xs12 sm4 class="smallspace">
         <v-card>
           <v-card-media
-            :src="drawingImage"
+            v-if="premium"
+            :src="forestImage"
+            height="200px"
+          >
+          </v-card-media>
+          <v-card-media
+            v-if="!premium"
+            :src="forestLockedImage"
             height="200px"
           >
           </v-card-media>
           <v-card-title primary-title>
             <div>
               <div class="headline text-xs-left">Forest Theme</div>
-              <span class="grey--text">Paralax beautiful premium theme.</span>
+              <span class="grey--text">Calming forest theme.</span>
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat @click="$emit('showView', 'EditPage', 'Forest')" :disabled="!premium">Use</v-btn>
+            <v-btn flat @click="$emit('showView', 'EditPage', 'Forest')" v-if="premium">Use</v-btn>
+            <v-btn flat @click="$emit('showView', 'Upgrade')" v-if="!premium">Upgrade</v-btn>
             <v-btn flat color="blue" to="/forest">Preview</v-btn>
             <v-spacer></v-spacer>
-            <v-btn icon @click.native="show4 = !show4">
-              <v-icon>{{ show4 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
+            <v-btn icon @click.native="show5 = !show5">
+              <v-icon>{{ show5 ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
             </v-btn>
           </v-card-actions>
           <v-slide-y-transition>
-            <v-card-text v-show="show4">
-              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+            <v-card-text v-show="show5">
+              Premium Theme.
             </v-card-text>
           </v-slide-y-transition>
         </v-card>
@@ -151,9 +175,14 @@
 <script>
   import springImage from "../assets/springtheme4.png"
   import beachImage from "../assets/beachBackground.png"
-  import paraImage from "../assets/paratheme.png"
+  import paraImage from "../assets/paralaxbg4.png"
   import drawingImage from "../assets/drawingtheme.png"
+  import drawingLockedImage from "../assets/drawingLockedtheme.png"
+  import forestImage from "../assets/forrest/forestbg.png"
+  import forestLockedImage from "../assets/forrest/forestLockedbg.png"
+  import paraLockedImage from "../assets/paralaxLocked.png"
   import axios from 'axios'
+  import auth from '../auth'
 
   export default {
     data: () => ({
@@ -161,10 +190,15 @@
       show2: false,
       show3: false,
       show4: false,
+      show5: false,
       springImage: springImage,
       beachImage: beachImage,
       paraImage: paraImage,
+      paraLockedImage: paraLockedImage,
       drawingImage: drawingImage,
+      drawingLockedImage: drawingLockedImage,
+      forestImage: forestImage,
+      forestLockedImage: forestLockedImage,
       premium: false
     }),
     created(){
@@ -172,7 +206,7 @@
     },
     methods: {
       fetchData() {
-        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 

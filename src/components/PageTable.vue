@@ -32,12 +32,13 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
 
   export default {
     data () {
       return {
         search: '',
-        defaultUrl: 'http://localhost:8080/#',
+        defaultUrl: '/#',
         premium: false,
         headers: [
           {
@@ -66,7 +67,7 @@
     },
     methods: {
       fetchData() {
-        axios.get('http://localhost:8082/users/table', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.get(auth.API.URL+'users/table', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           var i;
           var arrayOfJson = []
@@ -82,7 +83,7 @@
           })
       },
       getEmails(unique){
-        axios.get('http://localhost:8082/users/txt/'+unique, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}, responseType: 'blob'
+        axios.get(auth.API.URL+'users/txt/'+unique, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}, responseType: 'blob'
         }).then((resp) => {
           let blob = new Blob([resp.data], { type:   'text/plain' } )
           let link = document.createElement('a')
@@ -95,7 +96,7 @@
           })
       },
       fetchPremiumData() {
-        axios.get('http://localhost:8082/users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 

@@ -121,6 +121,12 @@
             required
           ></v-text-field>
           <v-text-field
+            label="Email Submit Redirect Url"
+            v-model="redirectUrl"
+            :rules="filterRules"
+            required
+          ></v-text-field>
+          <v-text-field
             label="Page id (/JoeShmoe)"
             v-model="pageid"
             :rules="pageIdRules"
@@ -138,6 +144,7 @@
 
 <script>
   import axios from 'axios'
+  import auth from '../auth'
   import {eventBus} from '../main';
 
   export default {
@@ -161,9 +168,10 @@
         photo3title: "Morbi Eleifend",
         photo3text: "Curabitur eget semper ante. Morbi eleifend ultricies est, a blandit diam vehicula vel. Vestibulum porttitor nisi quis viverra hendrerit. Suspendisse vel volutpat nibh, vel elementum lacus. Maecenas commodo pulvinar dui, at cursus metus imperdiet.",
         errorText: '',
+        redirectUrl: "http://www.google.com",
         filterRules: [
           (v) => !!v || 'Text is required',
-          (v) => /^[ A-Za-z0-9_@!:%.,#&+(?)=$-]*$/.test(v) || 'Invalid character'
+          (v) => /^[ A-Za-z0-9_@!:%.,/#&+(?)=$'-]*$/.test(v) || 'Invalid character'
         ],
         pageIdRules: [
           (v) => !!v || 'Page id required',
@@ -173,7 +181,6 @@
     },
     methods:{
       hellow: function(){
-        console.log(this.title+this.description+this.pageid)
         let theData = JSON.stringify({
           title: this.title,
           description: this.description,
@@ -189,6 +196,7 @@
           photo2text: this.photo2text,
           photo3title: this.photo3title,
           photo3text: this.photo3text,
+          redirectUrl: this.redirectUrl
         })
 
         let data = JSON.stringify({
@@ -199,11 +207,11 @@
 
         var self = this
 
-        axios.post('http://localhost:8082/users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then(function(response){
           console.log(response)
           if(response.data){
-            window.location.href = "http://localhost:8080/#/"
+            window.location.href = auth.API.REDIRECT_URL
           }else{
             self.errorText = 'Page name already taken.'
           }
