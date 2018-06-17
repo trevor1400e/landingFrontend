@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import PageSpring from '../components/PageSpring'
 import Dashboard from '../components/Dashboard'
 import Login from '../components/Login'
-import NewLogin from '../components/NewLogin'
+import NewLogin from '../components/login/NewLogin'
 import Coins from '../components/Coins'
 import EditPage from '../components/EditPage'
 import PageBeach from '../components/PageBeach'
@@ -13,7 +13,7 @@ import PageForest from '../components/PageForest'
 import PageLegal from '../components/legal'
 import PagePrivacy from '../components/privacy'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [

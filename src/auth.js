@@ -6,11 +6,11 @@ import Vue from 'vue'
 
 // URL and endpoint constants
 
-var demomode = false
+var demomode = true
 var API_URL;
 var REDIRECT_URL;
 
-if(demomode === false){
+if(!demomode){
   API_URL = 'http://65.151.191.49:8082/'
   REDIRECT_URL = 'http://leadlucky.com/#/'
 }else{
@@ -19,7 +19,6 @@ if(demomode === false){
 }
 const LOGIN_URL = API_URL + 'users/signin'
 const SIGNUP_URL = API_URL + 'users/signup'
-
 
 export default {
 
@@ -32,34 +31,37 @@ export default {
     REDIRECT_URL: REDIRECT_URL
   },
 
-
-
   // Send a request to the login URL and save the returned JWT
-  login(context, creds, callback) {
+  login(creds, callback) {
 
-    axios.post(LOGIN_URL, creds, {headers: {"Content-Type": "application/json"}
-    }).then(function(response){
-      localStorage.setItem('id_token', response.data)
-      localStorage.setItem('access_token', response.data)
+    axios.post(LOGIN_URL, creds, {headers: {"Content-Type": "application/json"}}).then(res => {
+      localStorage.setItem('id_token', res.data)
+      localStorage.setItem('access_token', res.data)
 
       window.location.href = window.location.href+"dashboard"
-
       callback(true)
     }).catch(error => {
-      callback(false)
+      callback(
+        false,
+        (error.response && error.response.data && error.response.data.message)
+        || error.message
+      )
     });
   },
 
-  signup(context, creds, callback2) {
-    axios.post(SIGNUP_URL, creds, {headers: {"Content-Type": "application/json"}
-    }).then(function(response){
-      localStorage.setItem('id_token', response.data)
-      localStorage.setItem('access_token', response.data)
+  signup(creds, callback) {
+    axios.post(SIGNUP_URL, creds, {headers: {"Content-Type": "application/json"}}).then(res => {
+      localStorage.setItem('id_token', res.data)
+      localStorage.setItem('access_token', res.data)
 
       window.location.href = window.location.href+"dashboard"
-      callback2(true)
+      callback(true)
     }).catch(error => {
-      callback2(false)
+      callback(
+        false,
+        (error.response && error.response.data && error.response.data.message)
+        || error.message
+      )
     });
   },
 
