@@ -89,6 +89,7 @@
 
             axios.post(auth.API.URL+'users/upgrade', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
             }).then(function(response){
+              // TODO maybe handle success or errors?
             });
           }
         });

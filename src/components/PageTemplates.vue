@@ -210,7 +210,7 @@
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 
-          if(resp.data.premiumstatus === "active"){
+          if(resp.data.premiumStatus === "active"){
             this.premium = true
           }
 

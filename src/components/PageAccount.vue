@@ -14,7 +14,7 @@
         <h1>Account Name: {{theUser.username}}</h1>
         <h1>Account Email: {{theUser.email}}</h1>
         <h1>Account Role: {{theUser.roles}} <v-btn color="info" @click="$emit('showView', 'Upgrade')">Upgrade</v-btn></h1>
-        <h1>Premium Status: {{theUser.premiumstatus}}</h1>
+        <h1>Premium Status: {{theUser.premiumStatus}}</h1>
         <br/>
       </v-card>
     </v-flex>
@@ -44,7 +44,7 @@
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 
-          this.premium = resp.data.premiumstatus
+          this.premium = resp.data.premiumStatus
 
         })
           .catch((err) => {

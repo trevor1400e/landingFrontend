@@ -13,7 +13,7 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="tableData"
       :search="search"
     >
       <template slot="items" slot-scope="props">
@@ -21,7 +21,8 @@
         <td class="text-xs-center"><a :href="defaultUrl+props.item.URL">{{ props.item.URL }}</a></td>
         <td v-if="premium === true" class="text-xs-center">{{ props.item.conversions }}</td>
         <td v-if="premium === true" class="text-xs-center">{{ props.item.impressions }}</td>
-        <td class="text-xs-center">{{ props.item.emails }} <a v-if="props.item.emails > 0" @click="getEmails(props.item.name)">Download</a></td>
+        <td class="text-xs-center">{{ props.item.emails }} <a v-if="props.item.emails > 0"
+                                                              @click="getEmails(props.item.name)">Download</a></td>
       </template>
       <v-alert slot="no-results" :value="true" color="error" icon="warning">
         Your search for "{{ search }}" found no results.
@@ -35,7 +36,11 @@
   import auth from '../auth'
 
   export default {
-    data () {
+    created() {
+      this.fetchData()
+      this.fetchPremiumData()
+    },
+    data() {
       return {
         search: '',
         defaultUrl: '/#',
@@ -46,49 +51,42 @@
             align: 'left',
             value: 'name'
           },
-          { text: 'URL', value: 'URL', align: 'center' },
-          { text: 'Email Count', value: 'emails', align: 'center' }
+          {text: 'URL', value: 'URL', align: 'center'},
+          {text: 'Email Count', value: 'emails', align: 'center'}
         ],
-        items: [
-          {
-            value: false,
-            name: 'New One',
-            URL: 'www.com',
-            conversions: 5,
-            impressions: 69,
-            emails: 6969
-          }
-        ]
+        pages: []
       }
     },
-    created(){
-      this.fetchData()
-      this.fetchPremiumData()
+    computed: {
+      tableData: () => this.pages.map((page) => ({
+        value: false,
+        name: page.name,
+        URL: `/${page.themeName}/${page.name}`,
+        conversions: `${(page.emailCount / page.viewCount).toFixed(3) * 100}%`,
+        impressions: page.viewCount,
+        emails: page.emailCount
+      }))
     },
     methods: {
       fetchData() {
-        axios.get(auth.API.URL+'users/table', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
-        }).then((resp) => {
-          var i;
-          var arrayOfJson = []
-          for (i in resp.data) {
-            arrayOfJson.push(JSON.parse(resp.data[i]))
-          }
-
-          this.items = arrayOfJson
-
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+        axios.get(
+          auth.API.URL + 'users/me/pages',
+          {headers: auth.getAuthHeader()}
+        ).then((resp) => {
+          this.pages = resp.data;
+        })
+        .catch((err) => {
+          console.log(err)
+        })
       },
-      getEmails(unique){
-        axios.get(auth.API.URL+'users/txt/'+unique, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}, responseType: 'blob'
+      getEmails(unique) {
+        axios.get(auth.API.URL + 'users/txt/' + unique, {
+          headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}, responseType: 'blob'
         }).then((resp) => {
-          let blob = new Blob([resp.data], { type:   'text/plain' } )
+          let blob = new Blob([resp.data], {type: 'text/plain'})
           let link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
-          link.download = unique+'.txt'
+          link.download = unique + '.txt'
           link.click()
         })
           .catch((err) => {
@@ -96,11 +94,12 @@
           })
       },
       fetchPremiumData() {
-        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.get(auth.API.URL + 'users/me', {
+          headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
           this.theUser = JSON.parse(JSON.stringify(resp.data))
 
-          if(resp.data.premiumstatus === "active"){
+          if (resp.data.premiumStatus === "active") {
             this.premium = true
 
             this.headers = [
@@ -109,10 +108,10 @@
                 align: 'left',
                 value: 'name'
               },
-              { text: 'URL', value: 'URL', align: 'center' },
-              { text: 'Conversion Rate', value: 'conversions', align: 'center' },
-              { text: 'Impressions', value: 'impressions', align: 'center' },
-              { text: 'Email Count', value: 'emails', align: 'center' }
+              {text: 'URL', value: 'URL', align: 'center'},
+              {text: 'Conversion Rate', value: 'conversions', align: 'center'},
+              {text: 'Impressions', value: 'impressions', align: 'center'},
+              {text: 'Email Count', value: 'emails', align: 'center'}
             ]
           }
 
