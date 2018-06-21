@@ -86,7 +86,7 @@
     methods: {
       fetchData() {
         if(this.$route.params.id != null) {
-          axios.get(auth.API.URL+'page/' + this.$route.params.id + '/')
+          axios.get(auth.API.URL+'page/' + this.$route.params.id + '/data')
             .then((resp) => {
               const myObjStr = JSON.stringify(resp.data);
               this.planedata = JSON.parse(myObjStr)
@@ -100,16 +100,13 @@
       },
       saveEmail(theEmail){
 
-        var self = this;
+        const self = this;
 
         if(this.$route.params.id != null) {
           if(this.valid){
-            let data = JSON.stringify({
-              uniquename: this.$route.params.id,
-              email: theEmail
-            })
+            let data = JSON.stringify({ email: theEmail })
 
-            axios.post(auth.API.URL+'page/email', data, {headers: {"Content-Type": "application/json"}
+            axios.post(auth.API.URL+'page/' + this.$route.params.id + '/email', data, {headers: {"Content-Type": "application/json"}
             }).then(function(response){
               console.log(response)
               window.location.href = self.planedata.redirectUrl

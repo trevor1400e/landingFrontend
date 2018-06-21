@@ -159,7 +159,7 @@
     methods: {
       fetchData() {
         if(this.$route.params.id != null) {
-          axios.get(auth.API.URL+'page/' + this.$route.params.id + '/')
+          axios.get(auth.API.URL+'page/' + this.$route.params.id + '/data')
             .then((resp) => {
               console.log(resp)
               const myObjStr = JSON.stringify(resp.data);
@@ -174,18 +174,14 @@
       },
       saveEmail(theEmail){
 
-      var self = this;
+      const self = this;
 
         if(this.$route.params.id != null) {
           if(this.valid){
-            let data = JSON.stringify({
-              uniquename: this.$route.params.id,
-              email: theEmail
-            })
+            let data = { email: theEmail };
 
-            axios.post(auth.API.URL+'page/email', data, {headers: {"Content-Type": "application/json"}
-            }).then(function(response){
-              console.log(response)
+            axios.post(auth.API.URL+'page/' + this.$route.params.id + '/email', data)
+            .then(function(response){
               window.location.href = self.pagedata.redirectUrl
             }).catch((err) => {
               console.log('Loading page data failed or invalid redirect.')

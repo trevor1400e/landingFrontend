@@ -64,7 +64,7 @@
           ></v-text-field>
           <p class="text-xs-left" v-text="errorText" style="color: red"></p>
         </v-form>
-        <v-btn color="primary" @click.native="hellow" :disabled="!valid">Submit</v-btn>
+        <v-btn color="primary" @click.native="createPage" :disabled="!valid">Submit</v-btn>
         <v-btn flat to="/">Cancel</v-btn>
       </v-stepper-content>
     </v-stepper-items>
@@ -100,27 +100,25 @@
       }
     },
     methods:{
-      hellow: function(){
-        let theData = JSON.stringify({
-          title: this.title,
-          description: this.description,
-          buttontext: this.buttontext,
-          poptitle: this.poptitle,
-          popsub: this.popsub,
-          redirectUrl: this.redirectUrl
-        })
+      createPage: function(){
+        let data = {
+          name: this.pageid,
+          themeName: 'spring',
+          data: JSON.stringify({
+            title: this.title,
+            description: this.description,
+            buttontext: this.buttontext,
+            poptitle: this.poptitle,
+            popsub: this.popsub,
+            redirectUrl: this.redirectUrl
+          })
+        };
 
-        let data = JSON.stringify({
-          uniquename: this.pageid,
-          themename: 'spring',
-          data: theData
-        })
+        const self = this;
 
-        var self = this
-
-        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then(function(response){
-          console.log(response)
+          console.log(response);
           if(response.data){
             window.location.href = auth.API.REDIRECT_URL
           }else{

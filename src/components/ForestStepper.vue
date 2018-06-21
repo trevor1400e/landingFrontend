@@ -180,34 +180,32 @@
       }
     },
     methods:{
-      hellow: function(){
-        let theData = JSON.stringify({
-          title: this.title,
-          description: this.description,
-          subtitle: this.subtitle,
-          subheader: this.subheader,
-          emailheader: this.emailheader,
-          buttontext: this.buttontext,
-          pictureblocktitle: this.pictureblocktitle,
-          pictureblockdescription: this.pictureblockdescription,
-          photo1title: this.photo1title,
-          photo1text: this.photo1text,
-          photo2title: this.photo2title,
-          photo2text: this.photo2text,
-          photo3title: this.photo3title,
-          photo3text: this.photo3text,
-          redirectUrl: this.redirectUrl
-        })
+      createPage: function(){
+        let data = {
+          name: this.pageid,
+          themeName: 'forest',
+          data: JSON.stringify({
+            title: this.title,
+            description: this.description,
+            subtitle: this.subtitle,
+            subheader: this.subheader,
+            emailheader: this.emailheader,
+            buttontext: this.buttontext,
+            pictureblocktitle: this.pictureblocktitle,
+            pictureblockdescription: this.pictureblockdescription,
+            photo1title: this.photo1title,
+            photo1text: this.photo1text,
+            photo2title: this.photo2title,
+            photo2text: this.photo2text,
+            photo3title: this.photo3title,
+            photo3text: this.photo3text,
+            redirectUrl: this.redirectUrl
+          })
+        };
 
-        let data = JSON.stringify({
-          uniquename: this.pageid,
-          themename: 'forest',
-          data: theData
-        })
+        const self = this;
 
-        var self = this
-
-        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then(function(response){
           console.log(response)
           if(response.data){
@@ -220,14 +218,14 @@
       sendChange(whatsChanging, changeTo) {
        // eventBus.$emit('beachChange', whatsChanging, changeTo)
 
-        let Data = JSON.stringify({
+        let data = JSON.stringify({
           whatsChanging: whatsChanging,
           changeTo: changeTo
-        })
+        });
 
         var iframeEl = document.getElementById('forestframe')
 
-        iframeEl.contentWindow.postMessage(Data, '*');
+        iframeEl.contentWindow.postMessage(data, '*');
 
       }
     }

@@ -188,37 +188,34 @@
       }
     },
     methods:{
-      hellow: function(){
-        console.log(this.title+this.description+this.pageid)
-        let theData = JSON.stringify({
-          logo: this.logo,
-          title: this.title,
-          description: this.description,
-          headline: this.headline,
-          subheading: this.subheading,
-          buttontext: this.buttontext,
-          feature1: this.feature1,
-          feature1text: this.feature1text,
-          feature2: this.feature2,
-          feature2text: this.feature2text,
-          feature3: this.feature3,
-          feature3text: this.feature3text,
-          bottomHeadline: this.bottomHeadline,
-          bottomSubheading: this.bottomSubheading,
-          bottomButton: this.bottomButton,
-          redirectUrl: this.redirectUrl
-        })
+      createPage: function(){
+        let data = {
+          name: this.pageid,
+          themeName: 'paralax',
+          data: JSON.stringify({
+            logo: this.logo,
+            title: this.title,
+            description: this.description,
+            headline: this.headline,
+            subheading: this.subheading,
+            buttontext: this.buttontext,
+            feature1: this.feature1,
+            feature1text: this.feature1text,
+            feature2: this.feature2,
+            feature2text: this.feature2text,
+            feature3: this.feature3,
+            feature3text: this.feature3text,
+            bottomHeadline: this.bottomHeadline,
+            bottomSubheading: this.bottomSubheading,
+            bottomButton: this.bottomButton,
+            redirectUrl: this.redirectUrl
+          })
+        };
 
-        let data = JSON.stringify({
-          uniquename: this.pageid,
-          themename: 'paralax',
-          data: theData
-        })
+        const self = this;
 
-        var self = this
-
-        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
-        }).then(function(response){
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}})
+        .then(function(response){
           if(response.data){
             window.location.href = auth.API.REDIRECT_URL
           }else{

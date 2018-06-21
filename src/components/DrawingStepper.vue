@@ -111,30 +111,25 @@
       }
     },
     methods:{
-      hellow: function(){
-        let theData = JSON.stringify({
-          title: this.title,
-          description: this.description,
-          buttontext: this.buttontext,
-          twitterUrl: this.twitterUrl,
-          facebookUrl: this.facebookUrl,
-          instagramUrl: this.instagramUrl,
-          redirectUrl: this.redirectUrl
-        })
+      createPage: function(){
+        let data = {
+          name: this.pageid,
+          themeName: 'drawing',
+          data: JSON.stringify({
+            title: this.title,
+            description: this.description,
+            buttontext: this.buttontext,
+            twitterUrl: this.twitterUrl,
+            facebookUrl: this.facebookUrl,
+            instagramUrl: this.instagramUrl,
+            redirectUrl: this.redirectUrl
+          })
+        };
 
-        debugger
+        const self = this;
 
-        let data = JSON.stringify({
-          uniquename: this.pageid,
-          themename: 'drawing',
-          data: theData
-        })
-
-        var self = this
-
-        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then(function(response){
-          console.log(response)
           if(response.data){
             window.location.href = auth.API.REDIRECT_URL
           }else{

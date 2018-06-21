@@ -84,23 +84,21 @@
       }
     },
     methods:{
-      hellow: function(){
-        let theData = JSON.stringify({
-          title: this.title,
-          description: this.description,
-          buttontext: this.buttontext,
-          redirectUrl: this.redirectUrl
-        })
+      createPage: function(){
+        let data = {
+          name: this.pageid,
+          themeName: 'beach',
+          data: JSON.stringify({
+            title: this.title,
+            description: this.description,
+            buttontext: this.buttontext,
+            redirectUrl: this.redirectUrl
+          })
+        };
 
-        let data = JSON.stringify({
-          uniquename: this.pageid,
-          themename: 'beach',
-          data: theData
-        })
+        const self = this;
 
-        var self = this
-
-        axios.post(auth.API.URL+'users/theme', data, {headers: {"Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem('access_token')}
+        axios.post(auth.API.URL+'users/theme', data, {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then(function(response){
           console.log(response)
           if(response.data){

@@ -58,14 +58,15 @@
       }
     },
     computed: {
-      tableData: () => this.pages.map((page) => ({
-        value: false,
-        name: page.name,
-        URL: `/${page.themeName}/${page.name}`,
-        conversions: `${(page.emailCount / page.viewCount).toFixed(3) * 100}%`,
-        impressions: page.viewCount,
-        emails: page.emailCount
-      }))
+      tableData: function() {
+        return this.pages.map((page) => ({
+            name: page.name,
+            URL: `/${page.themeName}/${page.name}`,
+            conversions: `${(page.emailCount / page.viewCount).toFixed(3) * 100}%`,
+            impressions: page.viewCount,
+            emails: page.emailCount
+        }))
+      }
     },
     methods: {
       fetchData() {
