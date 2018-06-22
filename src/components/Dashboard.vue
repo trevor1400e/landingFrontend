@@ -7,6 +7,7 @@
         fixed
         v-model="drawer"
         app
+        v-if="!fullscreen"
       >
         <v-list dense>
           <v-list-tile @click="showView('Dash')">
@@ -49,7 +50,7 @@
             v-model="isdark"
           ></v-switch></v-flex>
       </v-navigation-drawer>
-      <v-toolbar app fixed clipped-left>
+      <v-toolbar v-if="!fullscreen" app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <v-toolbar-title>LeadLucky</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -60,20 +61,16 @@
         </v-btn>
 
       </v-toolbar>
-      <v-content>
+      <v-content class="header-fix">
 
-        <alertmessage></alertmessage>
-        <PageTable v-if="display === 'Dash'"></PageTable>
-        <PageTemplates @showView="showView" v-if="display === 'Temp'"></PageTemplates>
-        <EditPage  v-if="display === 'EditPage'" :parentData="themeName"></EditPage>
-        <PageAccount @showView="showView" v-if="display === 'Acct'"></PageAccount>
-        <PageUpgrade v-if="display === 'Upgrade'"></PageUpgrade>
+        <!--<alertmessage></alertmessage>-->
+        <router-view></router-view>
+        <!--<PageTable v-if="display === 'Dash'"></PageTable>-->
+        <!--<PageTemplates @showView="showView" v-if="display === 'Temp'"></PageTemplates>-->
+        <!--<PageAccount @showView="showView" v-if="display === 'Acct'"></PageAccount>-->
+        <!--<PageUpgrade v-if="display === 'Upgrade'"></PageUpgrade>-->
       </v-content>
-      <v-footer app fixed style="color: #7c7c7c">
-        <span>LeadLucky &copy; 2018</span>
-        <v-spacer></v-spacer>
-        <span>Support@LeadLucky.com</span>
-      </v-footer>
+
     </v-app>
     </div>
     <div v-if="authenticated === false">
@@ -94,11 +91,14 @@
   import PageAccount from './PageAccount'
   import PageUpgrade from './PageUpgrade'
   import axios from 'axios'
+  import fullscreenMixin from '../mixins/fullscreenMixin'
   import {eventBus} from '../main';
+
 
 
   export default {
     name: 'Dashboard',
+    mixins: [fullscreenMixin],
     components: {
       Hello, alertmessage, PageTable, PageTemplates, PagePlane, EditPage, PageAccount, PageUpgrade
     },
@@ -108,6 +108,7 @@
       isdark: false,
       user2: auth.user,
       themeName: '',
+      fullscreen: false,
       authenticated: true
     }),
     methods: {
@@ -136,6 +137,7 @@
       }
     },
     created(){
+      console.log(`FS: ${this.fullscreen}`)
       auth.checkAuth()
       if(auth.user.authenticated === true){
         this.fetchData()
@@ -143,6 +145,10 @@
         this.authenticated = false
         window.location.href = auth.API.REDIRECT_URL
       }
+    },
+    beforeMount(){
+      const self = this;
+      eventBus.$on('fullscreen', fs => {self.fullscreen = fs});
     }
   }
 </script>
@@ -155,5 +161,9 @@
     text-align: center;
     color: #2c3e50;
     /*margin-top: 60px;*/
+  }
+
+  .header-fix {
+    padding-top: 0 !important;
   }
 </style>

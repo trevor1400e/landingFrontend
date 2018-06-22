@@ -117,8 +117,8 @@
     },
     methods: {
       submit() {
-        self.errorLogin = null;
         const self = this;
+        self.errorLogin = null;
         let data = JSON.stringify({
           username: this.credentials.username,
           password: this.credentials.password

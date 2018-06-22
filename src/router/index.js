@@ -12,6 +12,7 @@ import PageDrawing from '../components/PageDrawing'
 import PageForest from '../components/PageForest'
 import PageLegal from '../components/legal'
 import PagePrivacy from '../components/privacy'
+import themes from '../themes'
 
 Vue.use(Router);
 
@@ -25,17 +26,14 @@ export default new Router({
     {
       path: '/dashboard',
       name:'Dashboard',
-      component: Dashboard
-    },
-    {
-      path: '/spring/:id',
-      name:'PageSpring',
-      component: PageSpring
-    },
-    {
-      path: '/spring',
-      name:'PageSpringOG',
-      component: PageSpring
+      component: Dashboard,
+      children: [
+        {
+          path: '/edit/:themeName',
+          name: 'edit pages',
+          component: EditPage
+        }
+      ]
     },
     {
       path: '/',
@@ -47,60 +45,28 @@ export default new Router({
       name: 'Coins',
       component: Coins
     },
-    {
-      path: '/editplane',
-      name: 'editPlane',
-      component: EditPage
-    },
-    {
-      path: '/beach',
-      name: 'PageBeachOG',
-      component: PageBeach
-    },
-    {
-      path: '/beach/:id',
-      name: 'PageBeach',
-      component: PageBeach
-    },
-    {
-      path: '/paralax',
-      name: 'PageParaOG',
-      component: PagePara
-    },
-    {
-      path: '/paralax/:id',
-      name: 'PagePara',
-      component: PagePara
-    },
+
     {
       path: '/legal',
       name: 'PageLegal',
       component: PageLegal
     },
     {
-      path: '/drawing',
-      name: 'PageDrawingOG',
-      component: PageDrawing
-    },
-    {
-      path: '/drawing/:id',
-      name: 'PageDrawing',
-      component: PageDrawing
-    },
-    {
       path: '/privacy',
       name: 'privacyOG',
       component: PagePrivacy
     },
-    {
-      path: '/forest',
-      name: 'forestOG',
-      component: PageForest
-    },
-    {
-      path: '/forest/:id',
-      name: 'forest',
-      component: PageForest
-    }
+    ...Object.keys(themes).map(themeName => ({
+        path: `/${themeName}/:id`,
+        name: themeName,
+        component: themes[themeName]
+    })),
+    ...Object.keys(themes).map(themeName => {
+      return {
+        path: `/${themeName}`,
+        name: `${themeName}-demo`,
+        component: themes[themeName]
+      }
+    })
   ]
 })

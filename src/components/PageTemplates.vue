@@ -15,7 +15,7 @@
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat @click="$emit('showView', 'EditPage', 'Spring')">Use</v-btn>
+            <v-btn @click="$router.history.push('/edit/spring')" flat>Use</v-btn>
             <v-btn flat to="/spring" color="blue">Preview</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon @click.native="show = !show">

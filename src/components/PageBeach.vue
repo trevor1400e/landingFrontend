@@ -5,10 +5,10 @@
       <v-layout>
           <div class="optin">
             <v-flex xs12>
-                <h1 v-if="demoMode === true" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
+                <h1 v-if="demoMode === true" class="white--text scale-font" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
                 <h2 v-if="demoMode === true" style="font-family: 'Lucida Bright',Georgia,serif; font-size: 2vw; color: #a2b1c4">{{description}}</h2>
 
-                <h1 v-if="demoMode === false" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{ pagedata.title }}</h1>
+                <h1 v-if="demoMode === false" class="white--text scale-font" style="font-family: 'Lucida Bright',Georgia,serif;">{{ pagedata.title }}</h1>
                 <h2 v-if="demoMode === false" style="font-family: 'Lucida Bright',Georgia,serif; font-size: 2vw; color: #a2b1c4">{{ pagedata.description }}</h2>
                   <!--<p>Name: {{ planedata.name }}</p>-->
 
@@ -129,6 +129,23 @@
           }
         }
         });
+    },
+    dataContract: {
+      title: {
+        name: "Title",
+        type: String,
+        default: "Relax."
+      },
+      description: {
+        name: "Description",
+        type: String,
+        default: "Receive 10% off your Hotel right now.",
+      },
+      buttontext: {
+        name: "Button Text",
+        type: String,
+        default: "Save Now"
+      },
     }
   }
 </script>
@@ -168,7 +185,7 @@
     text-align: center;
     background: rgba(0, 0, 0, 0.75);
   }
-  .scalesize{
+  .scale-font{
     font-size: 4vw;
   }
 </style>

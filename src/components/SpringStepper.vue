@@ -75,8 +75,10 @@
   import axios from 'axios'
   import auth from '../auth'
   import {eventBus} from '../main';
+  import validation from '../mixins/validationMixin'
 
   export default {
+    mixins: [validation],
     data () {
       return {
         valid: false,
@@ -88,15 +90,7 @@
         poptitle: "Sign Up Now",
         popsub: "Get 10% off your next order!",
         redirectUrl: "http://www.google.com",
-        errorText: '',
-        filterRules: [
-          (v) => !!v || 'Text is required',
-          (v) => /^[ A-Za-z0-9_@!:%.,/#&+(?)=$-]*$/.test(v) || 'Invalid character'
-        ],
-        pageIdRules: [
-          (v) => !!v || 'Page id required',
-          (v) => /^[A-Za-z0-9]*$/.test(v) || 'Text must contain alpha-numeric only'
-        ]
+        errorText: ''
       }
     },
     methods:{

@@ -68,7 +68,23 @@ export default {
     this.passwordsMatch = (originalPassword) => buildRules(
       [],[(validatePassword) => validatePassword === originalPassword],
       ['Passwords must match']
-    )
+    );
+
+    this.urlRule = buildRules(
+      [],
+      [(url) => {
+        if(url.toLowerCase().startsWith('http://')){
+          url = url.substring('http://'.length)
+        }
+        if(url.toLowerCase().startsWith('https://')){
+          url = url.substring('https://'.length)
+        }
+        return /[A-z|0-9]+\.[A-z|0-9]{2,22}/.test(url)
+    }],
+      ['Invalid URL']
+    );
+
+    this.pageIdRule = buildRules([/^[A-Za-z0-9]*$/], [], 'Invalid Page Id')
 
   }
 }

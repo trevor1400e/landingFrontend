@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card style="display: none">
     <v-card-title>
       Landing Pages
       <v-spacer></v-spacer>

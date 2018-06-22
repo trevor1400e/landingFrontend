@@ -13,8 +13,8 @@
               justify-center
               class="white--text"
             >
-              <h1 v-if="demoMode === true" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
-              <h1 v-if="demoMode === false" class="white--text scalesize" style="font-family: 'Lucida Bright',Georgia,serif;">{{pagedata.title}}</h1>
+              <h1 v-if="demoMode === true" class="white--text scale-font" style="font-family: 'Lucida Bright',Georgia,serif;">{{title}}</h1>
+              <h1 v-if="demoMode === false" class="white--text scale-font" style="font-family: 'Lucida Bright',Georgia,serif;">{{pagedata.title}}</h1>
               <!--<h1 class="white&#45;&#45;text mb-2 display-1 text-xs-center">Parallax Template</h1>-->
               <div class="mb-2 text-xs-center" style="font-size: 2vw">{{description}}
                 <v-form v-model="valid">
@@ -327,7 +327,7 @@
     min-height: 0vh !important;
   }
 
-  .scalesize{
+  .scale-font{
     font-size: 4vw;
     /*zoom: 0.9;*/
     /*-moz-transform: scale(0.9);*/
