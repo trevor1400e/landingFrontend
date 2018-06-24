@@ -50,7 +50,7 @@
   export default {
     data () {
       return {
-        theUser: {}
+        user: {}
       }
     },
     created(){
@@ -61,7 +61,7 @@
         axios.get(auth.API.URL+'users/me', {
           headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
-          this.theUser = JSON.parse(JSON.stringify(resp.data))
+          this.user = JSON.parse(JSON.stringify(resp.data))
 
         })
           .catch((err) => {

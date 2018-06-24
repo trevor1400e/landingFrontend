@@ -93,7 +93,6 @@
 
 <script>
   import auth from '../../auth'
-  import axios from 'axios'
   import validationMixin from '../../mixins/validationMixin'
 
   export default {
@@ -151,30 +150,21 @@
       showRegistration(){
         this.loggingIn = false
       },
-      fetchData() {
-        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
-        }).then((resp) => {
-          this.theUser = JSON.parse(JSON.stringify(resp.data))
-
-          console.log(auth.API.REDIRECT_URL+"dashboard")
-          window.location.href = auth.API.REDIRECT_URL+"dashboard"
-        })
-          .catch((err) => {
-          })
-      }
     },
     created(){
-      auth.checkAuth()
-      if(auth.user.authenticated == true){
-        this.fetchData()
-      }
+      const router = this.$router
+      auth.refreshAuth((user) => {
+        if(user){
+          router.push('/dashboard')
+        }
+      })
     }
   }
 </script>
 
 <style>
   .background {
-    background-image: url('../../assets/background.jpeg');
+    background-image: url('/static/background.jpeg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
   }

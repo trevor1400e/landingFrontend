@@ -1,56 +1,62 @@
 <template>
   <div>
-    <!--<h1 class="text-xs-left">Account Settings</h1>-->
-    <!--<v-divider></v-divider>-->
-    <br/>
-    <v-flex xs6 offset-xs3>
-      <v-card class="elevation-12" style="border-radius: 5px">
-        <v-toolbar dark color="primary">
-          <v-flex xs12>
-          <v-toolbar-title>Account Settings</v-toolbar-title>
-          </v-flex>
-        </v-toolbar>
-        <br/>
-        <h1>Account Name: {{theUser.username}}</h1>
-        <h1>Account Email: {{theUser.email}}</h1>
-        <h1>Account Role: {{theUser.roles}} <v-btn color="info" @click="$emit('showView', 'Upgrade')">Upgrade</v-btn></h1>
-        <h1>Premium Status: {{theUser.premiumStatus}}</h1>
-        <br/>
+    <v-container p1>
+      <v-card>
+        <v-card-title>
+          <h3>Account Settings</h3>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field
+            label="username"
+            :value="userData.user.username"
+            disabled/>
+          <v-text-field
+            label="Email Address"
+            :value="userData.user.email"
+            disabled/>
+          <v-switch
+            label="Premium Status"
+            v-model="premium"
+            @change="premiumRedirect()"
+            :disabled="premium"/>
+        </v-card-text>
       </v-card>
-    </v-flex>
-
-
-
+      <br/>
+      <v-card>
+        <v-card-title>
+          <h3>Portal Settings</h3>
+        </v-card-title>
+        <v-card-text>
+          <v-switch
+            label="Dark Theme"
+            v-model="portalData.darkTheme"
+            @change="saveTheme"/>
+        </v-card-text>
+      </v-card>
+    </v-container>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  import auth from '../auth'
+  import store from '../store'
 
   export default {
-    data () {
+    data() {
       return {
-        theUser: {},
-        premium: "loading"
+        userData: store.userData,
+        portalData: store.portalData,
+        premium: false,
       }
     },
     created(){
-      this.fetchData()
+      this.premium = store.userData.user.premiumStatus === 'active'
     },
     methods: {
-      fetchData() {
-        axios.get(auth.API.URL+'users/me', {headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
-        }).then((resp) => {
-          this.theUser = JSON.parse(JSON.stringify(resp.data))
-
-          this.premium = resp.data.premiumStatus
-
-        })
-          .catch((err) => {
-            console.log(err)
-            this.premium = "unpaid"
-          })
+      saveTheme(darkTheme){
+        localStorage.setItem("darkTheme", darkTheme)
+      },
+      premiumRedirect(){
+        this.$router.history.push('/dashboard/upgrade')
       }
     }
   }

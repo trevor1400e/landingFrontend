@@ -1,8 +1,7 @@
 // src/auth/index.js
 
-import router from './router/index'
 import axios from 'axios'
-import Vue from 'vue'
+import store from './store'
 
 // URL and endpoint constants
 
@@ -22,10 +21,6 @@ const SIGNUP_URL = API_URL + 'users/signup'
 
 export default {
 
-  // User object will let us check authentication status
-  user: {
-    authenticated: false
-  },
   API:{
     URL: API_URL,
     REDIRECT_URL: REDIRECT_URL
@@ -33,12 +28,11 @@ export default {
 
   // Send a request to the login URL and save the returned JWT
   login(creds, callback) {
-
     axios.post(LOGIN_URL, creds, {headers: {"Content-Type": "application/json"}}).then(res => {
-      localStorage.setItem('id_token', res.data)
-      localStorage.setItem('access_token', res.data)
+      localStorage.setItem('id_token', res.data);
+      localStorage.setItem('access_token', res.data);
 
-      window.location.href = window.location.href+"dashboard"
+      window.location.href = window.location.href+"dashboard";
       callback(true)
     }).catch(error => {
       callback(
@@ -51,10 +45,10 @@ export default {
 
   signup(creds, callback) {
     axios.post(SIGNUP_URL, creds, {headers: {"Content-Type": "application/json"}}).then(res => {
-      localStorage.setItem('id_token', res.data)
-      localStorage.setItem('access_token', res.data)
+      localStorage.setItem('id_token', res.data);
+      localStorage.setItem('access_token', res.data);
 
-      window.location.href = window.location.href+"dashboard"
+      window.location.href = window.location.href+"dashboard";
       callback(true)
     }).catch(error => {
       callback(
@@ -67,24 +61,28 @@ export default {
 
   // To log out, we just need to remove the token
   logout() {
-    localStorage.removeItem('id_token')
-    localStorage.removeItem('access_token')
-    this.user.authenticated = false
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('access_token');
+    store.userData.user = null;
   },
 
-  checkAuth() {
-    var jwt = localStorage.getItem('id_token')
+  refreshAuth(callback) {
+    callback = callback || function(){};
+    const jwt = localStorage.getItem('id_token');
     if(jwt) {
-      this.user.authenticated = true
+      axios.get(this.API.URL + 'users/me', {headers: this.getAuthHeader()}).then((res) => {
+        store.userData.user = res.data;
+        callback(store.userData.user)
+      }).catch((err) => {
+        store.userData.user = null;
+        console.error(err);
+        callback(null)
+      })
     }
     else {
-      this.user.authenticated = false
+      store.userData.user = null;
+      callback(null)
     }
-  },
-  hellobish(header) {
-    axios.get(API_URL+'users/me', {headers: header}).then(function(response){
-        console.log(response)
-    })
   },
 
   // The object to be passed as a header for authenticated requests

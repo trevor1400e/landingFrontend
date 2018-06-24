@@ -1,5 +1,5 @@
 <template>
-  <v-card style="display: none">
+  <v-card>
     <v-card-title>
       Landing Pages
       <v-spacer></v-spacer>
@@ -98,7 +98,7 @@
         axios.get(auth.API.URL + 'users/me', {
           headers: {"Authorization": "Bearer " + localStorage.getItem('access_token')}
         }).then((resp) => {
-          this.theUser = JSON.parse(JSON.stringify(resp.data))
+          this.user = JSON.parse(JSON.stringify(resp.data))
 
           if (resp.data.premiumStatus === "active") {
             this.premium = true

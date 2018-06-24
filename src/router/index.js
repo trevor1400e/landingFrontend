@@ -1,36 +1,48 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import PageSpring from '../components/PageSpring'
-import Dashboard from '../components/Dashboard'
-import Login from '../components/Login'
+import App from '../components/App'
 import NewLogin from '../components/login/NewLogin'
 import Coins from '../components/Coins'
 import EditPage from '../components/EditPage'
-import PageBeach from '../components/PageBeach'
-import PagePara from '../components/PagePara'
-import PageDrawing from '../components/PageDrawing'
-import PageForest from '../components/PageForest'
 import PageLegal from '../components/legal'
 import PagePrivacy from '../components/privacy'
 import themes from '../themes'
+import PageTemplates from '../components/PageTemplates'
+import PageAccount from '../components/PageAccount'
+import PageUpgrade from '../components/PageUpgrade'
+import PageTable from '../components/PageTable'
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/oldlogin',
-      name:'Login',
-      component: Login
-    },
-    {
       path: '/dashboard',
-      name:'Dashboard',
-      component: Dashboard,
+      component: App,
       children: [
         {
-          path: '/edit/:themeName',
-          name: 'edit pages',
+          path: '/',
+          name: 'pages-list',
+          component: PageTable
+        },
+        {
+          path: 'themes',
+          name: 'themes-list',
+          component: PageTemplates
+        },
+        {
+          path: 'account',
+          name: 'account-settings',
+          component: PageAccount
+        },
+        {
+          path: 'upgrade',
+          name: 'upgrade',
+          component: PageUpgrade
+        },
+        {
+          path: 'edit/:themeName',
+          name: 'edit-page',
           component: EditPage
         }
       ]
@@ -59,13 +71,13 @@ export default new Router({
     ...Object.keys(themes).map(themeName => ({
         path: `/${themeName}/:id`,
         name: themeName,
-        component: themes[themeName]
+        component: themes[themeName].component
     })),
     ...Object.keys(themes).map(themeName => {
       return {
         path: `/${themeName}`,
         name: `${themeName}-demo`,
-        component: themes[themeName]
+        component: themes[themeName].component
       }
     })
   ]
